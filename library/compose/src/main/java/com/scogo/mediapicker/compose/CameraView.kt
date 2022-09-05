@@ -20,7 +20,6 @@ import java.io.File
 
 @Composable
 fun CameraView(
-    outputFile: File,
     onImageCaptured: (Uri) -> Unit,
     onError: (ImageCaptureException) -> Unit
 ){

@@ -14,12 +14,17 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),"proguard-rules.pro")
         }
+    }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.1.0-beta01"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -31,9 +36,12 @@ android {
 }
 
 dependencies {
+    implementation(project(":library:compose"))
     testImplementation("junit:junit:4.13.2")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.app.compat)
     implementation(libs.android.material)
     implementation(libs.android.constraint.layout)
+    implementation(libs.bundles.android.compose)
+    debugImplementation(libs.bundles.android.compose.debug)
 }
