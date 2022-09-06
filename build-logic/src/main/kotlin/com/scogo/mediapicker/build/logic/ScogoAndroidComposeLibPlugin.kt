@@ -1,7 +1,7 @@
 package com.scogo.mediapicker.build.logic
 
 import ANDROID_COMPILE_SDK_VERSION
-import ANDROID_COMPOSE_VERSION
+import ANDROID_COMPOSE_COMPILER_VERSION
 import ANDROID_MIN_SDK_VERSION
 import ANDROID_TARGET_SDK_VERSION
 import com.android.build.gradle.LibraryExtension
@@ -21,7 +21,7 @@ class ScogoAndroidComposeLibPlugin : Plugin<Project> {
                 compose = true
             }
             it.composeOptions {
-                kotlinCompilerExtensionVersion = target.ANDROID_COMPOSE_VERSION
+                kotlinCompilerExtensionVersion = target.ANDROID_COMPOSE_COMPILER_VERSION
             }
             it.compileOptions {
                 targetCompatibility = JavaVersion.VERSION_1_8

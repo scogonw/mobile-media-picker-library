@@ -14,4 +14,5 @@ internal val Project.ANDROID_MIN_SDK_VERSION get() = versionInt("android_min_sdk
 internal val Project.ANDROID_TARGET_SDK_VERSION get() = versionInt("android_target_sdk")
 internal val Project.ANDROID_COMPILE_SDK_VERSION get() = versionInt("android_compile_sdk")
 internal val Project.ANDROID_COMPOSE_VERSION get() = version("android_compose")
+internal val Project.ANDROID_COMPOSE_COMPILER_VERSION get() = version("android_compose_compiler")
 internal val Project.KOTLIN_VERSION get() = version("kotlin")

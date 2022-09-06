@@ -6,4 +6,5 @@ dependencies {
     debugImplementation(libs.bundles.android.compose.debug)
     implementation(libs.bundles.android.camerax)
     implementation(libs.android.compose.material.icons)
+    implementation(libs.android.accompanist.permissions)
 }
