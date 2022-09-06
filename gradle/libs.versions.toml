@@ -26,6 +26,7 @@ android_compose_ui = { module = "androidx.compose.ui:ui", version.ref = "android
 android_compose_activity = { module = "androidx.activity:activity-compose", version.ref = "android_compose_activity" }
 android_compose_material = { module = "androidx.compose.material:material", version.ref = "android_compose" }
 android_compose_material_icons = { module = "androidx.compose.material:material-icons-extended", version.ref = "android_compose" }
+android_compose_animation_graphics = { module = "androidx.compose.animation:animation-graphics", version.ref = "android_compose" }
 android_compose_preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref= "android_compose" }
 android_compose_tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "android_compose" }
 android_compose_test_manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "android_compose" }
@@ -34,7 +35,7 @@ android_camerax_lifecycle = { module = "androidx.camera:camera-lifecycle", versi
 android_camerax_view = { module = "androidx.camera:camera-view", version.ref = "android_camerax" }
 
 [bundles]
-android_compose = ["android_compose_ui","android_compose_material", "android_compose_preview", "android_compose_activity"]
+android_compose = ["android_compose_ui","android_compose_material", "android_compose_preview", "android_compose_activity", "android_compose_animation_graphics"]
 android_compose_debug = ["android_compose_tooling","android_compose_test_manifest"]
 android_camerax = ["android_camerax","android_camerax_lifecycle","android_camerax_view"]
 

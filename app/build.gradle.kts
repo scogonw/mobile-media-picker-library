@@ -37,6 +37,7 @@ android {
 
 dependencies {
     implementation(project(":library:compose"))
+    implementation(project(":library:utils"))
     testImplementation("junit:junit:4.13.2")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.app.compat)
