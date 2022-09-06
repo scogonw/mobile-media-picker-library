@@ -48,7 +48,6 @@ import kotlinx.coroutines.flow.collect
 import java.io.File
 import java.util.concurrent.Executor
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CameraView(
     outputDirectory: File,
