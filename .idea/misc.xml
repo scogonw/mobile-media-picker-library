@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/compose-model-1662382074984.xml" value="0.335" />
+        <entry key="../../../../layout/compose-model-1662463569020.xml" value="0.25" />
+        <entry key="../../../../layout/compose-model-1662465124434.xml" value="0.26055743243243246" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2682291666666667" />
       </map>
     </option>
@@ -13,5 +15,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="SuppressABINotification">
+    <option name="modulesWithSuppressedNotConfigured">
+      <set>
+        <option value="ScogoMediaPicker.library.compose" />
+      </set>
+    </option>
   </component>
 </project>
