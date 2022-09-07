@@ -3,9 +3,9 @@ package com.scogo.mediapicker.compose.permission
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -60,9 +60,7 @@ internal fun PermissionsView(
 @Preview
 @Composable
  fun PermissionsPreview() {
-    Button(onClick = { /*TODO*/ }) {
-
-    }
+     Text(text = "Hello")
 }
 
 

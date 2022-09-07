@@ -3,7 +3,6 @@ package com.scogo.mediapicker.compose.camera
 import android.view.MotionEvent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.material.IconButton
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,5 +40,4 @@ fun CameraActionIcon(
         onClick = { },
         content = content
     )
-
 }
