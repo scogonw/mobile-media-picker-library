@@ -24,6 +24,9 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/library" />
+            <option value="$PROJECT_DIR$/library/common" />
+            <option value="$PROJECT_DIR$/library/common/ui-res" />
+            <option value="$PROJECT_DIR$/library/common/ui-theme" />
             <option value="$PROJECT_DIR$/library/compose" />
             <option value="$PROJECT_DIR$/library/core" />
             <option value="$PROJECT_DIR$/library/presentation" />
