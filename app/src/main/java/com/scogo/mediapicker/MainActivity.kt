@@ -1,12 +1,8 @@
 package com.scogo.mediapicker
 
-import android.media.MediaActionSound
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.platform.ComposeView
-import com.scogo.mediapicker.compose.camera.CameraView
-import com.scogo.mediapicker.utils.getMediaDirectory
-import java.util.concurrent.Executors
+import com.scogo.mediapicker.presentation.picker.MediaPicker
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,16 +10,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
-        val executor = Executors.newSingleThreadExecutor()
+        val picker = MediaPicker.getInstance(
+            activity = this
+        )
+        picker.pick(
+            onImageSelected = {
 
-        findViewById<ComposeView>(R.id.composeView).setContent {
-            CameraView(
-                outputDirectory = getMediaDirectory("scogo"),
-                executor = executor ,
-                mediaActionSound = MediaActionSound(),
-                onImageCaptured = {},
-                onError = {}
-            )
-        }
+            }
+        )
     }
 }

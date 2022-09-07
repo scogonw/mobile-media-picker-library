@@ -32,13 +32,13 @@ fun PermissionsScreen(
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     permissions: List<String>,
-    navigateToHome: () -> Unit,
+    navigateToCamera: () -> Unit,
 ) {
     val permissionsState = rememberMultiplePermissionsState(permissions = permissions)
     val permissionsDenied = remember { mutableStateOf(false) }
 
     if(permissionsState.allPermissionsGranted) {
-        navigateToHome()
+        navigateToCamera()
     }else {
         PermissionsView(
             modifier = modifier,

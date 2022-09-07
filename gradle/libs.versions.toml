@@ -15,6 +15,7 @@ android_compose = "1.2.1"
 android_compose_compiler = "1.3.0"
 android_compose_activity = "1.5.1"
 android_compose_coil = "2.2.0"
+android_compose_navigation = "2.5.1"
 android_custom_view = "1.2.0-alpha01"
 android_custom_view_container = "1.0.0"
 android_camerax = "1.1.0"
@@ -35,6 +36,7 @@ android_compose_animation_graphics = { module = "androidx.compose.animation:anim
 android_compose_preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref= "android_compose" }
 android_compose_tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "android_compose" }
 android_compose_coil = { module = "io.coil-kt:coil-compose", version.ref = "android_compose_coil" }
+android_compose_navigation = { module = "androidx.navigation:navigation-compose", version.ref = "android_compose_navigation" }
 android_custom_view = { module = "androidx.customview:customview", version.ref = "android_custom_view" }
 android_custom_view_container = { module = "androidx.customview:customview-poolingcontainer", version.ref = "android_custom_view_container"}
 android_compose_test_manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "android_compose" }
@@ -44,7 +46,7 @@ android_camerax_view = { module = "androidx.camera:camera-view", version.ref = "
 android_accompanist_permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "android_accompanist" }
 
 [bundles]
-android_compose = ["android_compose_ui","android_compose_material", "android_compose_preview", "android_compose_activity", "android_compose_animation_graphics"]
+android_compose = ["android_compose_ui","android_compose_material", "android_compose_preview", "android_compose_activity", "android_compose_animation_graphics", "android_compose_navigation"]
 android_compose_debug = ["android_compose_tooling","android_compose_test_manifest","android_custom_view","android_custom_view_container"]
 android_camerax = ["android_camerax","android_camerax_lifecycle","android_camerax_view"]
 android_accompanist = ["android_accompanist_permissions"]
