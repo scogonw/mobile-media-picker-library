@@ -20,8 +20,8 @@ buildscript {
     dependencies {
         classpath(libs.gradle.plugin)
         classpath(libs.kotlin.gradle.plugin)
+        classpath(libs.android.hilt.gradle.plugin)
         classpath("com.scogo.mediapicker:build-logic")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
     }
 }
 tasks {

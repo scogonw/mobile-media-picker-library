@@ -20,6 +20,7 @@ android_custom_view = "1.2.0-alpha01"
 android_custom_view_container = "1.0.0"
 android_camerax = "1.1.0"
 android_accompanist = "0.25.1"
+android_hilt = "2.38.1"
 
 [libraries]
 gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
@@ -44,6 +45,9 @@ android_camerax = { module = "androidx.camera:camera-camera2", version.ref = "an
 android_camerax_lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "android_camerax" }
 android_camerax_view = { module = "androidx.camera:camera-view", version.ref = "android_camerax" }
 android_accompanist_permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "android_accompanist" }
+android_hilt_gradle_plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "android_hilt" }
+android_hilt = { module = "com.google.dagger:hilt-android", version.ref = "android_hilt" }
+android_hilt_compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "android_hilt" }
 
 [bundles]
 android_compose = ["android_compose_ui","android_compose_material", "android_compose_preview", "android_compose_activity", "android_compose_animation_graphics", "android_compose_navigation"]
