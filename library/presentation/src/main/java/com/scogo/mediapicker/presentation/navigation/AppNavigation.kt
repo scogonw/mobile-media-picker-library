@@ -8,8 +8,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.scogo.mediapicker.compose.permission.PermissionsScreen
+import com.scogo.mediapicker.presentation.camera.CameraDataHolder
 import com.scogo.mediapicker.presentation.camera.CameraScreen
 import com.scogo.mediapicker.presentation.media.MediaScreen
+import java.util.concurrent.Executor
 
 internal sealed class Screen(val route: String) {
     object Permissions : Screen("Permissions")
@@ -31,6 +33,8 @@ internal sealed class NavScreen(
 internal data class AppNavigationParams(
     val permissions: List<String>,
     val permissionsGranted: Boolean,
+    val cameraHolder: CameraDataHolder,
+    val executor: Executor,
 )
 
 @Composable
@@ -56,7 +60,9 @@ internal fun AppNavigation(
             )
             addCameraScreen(
                 navController = navController,
-                root = Screen.Camera
+                root = Screen.Camera,
+                holder = params.cameraHolder,
+                executor = params.executor
             )
             addMediaScreen(
                 navController = navController,
@@ -91,11 +97,16 @@ private fun NavGraphBuilder.addPermissionScreen(
 private fun NavGraphBuilder.addCameraScreen(
     navController: NavController,
     root: Screen,
+    holder: CameraDataHolder,
+    executor: Executor,
 ) {
     composable(
         route = NavScreen.Camera.createRoute(root),
         content = {
-            CameraScreen()
+            CameraScreen(
+                holder = holder,
+                executor = executor
+            )
         }
     )
 }
