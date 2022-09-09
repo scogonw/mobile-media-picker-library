@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.scogo.mediapicker.compose">
-
+    <application>
+        <activity
+            android:name="com.scogo.mediapicker.compose.home.HomeActivity"
+            android:exported="true"/>
+    </application>
 </manifest>

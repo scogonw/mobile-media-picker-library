@@ -28,11 +28,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.scogo.mediapicker.compose.components.CameraActionIcon
 import java.io.File
 import java.util.concurrent.Executor
 
 @Composable
-fun CameraView(
+internal fun CameraView(
     modifier: Modifier = Modifier,
     outputDirectory: File,
     executor: Executor,

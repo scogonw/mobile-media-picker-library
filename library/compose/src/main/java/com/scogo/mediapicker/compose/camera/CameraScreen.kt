@@ -1,4 +1,4 @@
-package com.scogo.mediapicker.presentation.camera
+package com.scogo.mediapicker.compose.camera
 
 import android.media.MediaActionSound
 import android.net.Uri
@@ -21,13 +21,12 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.scogo.mediapicker.common.ui_res.R
 import com.scogo.mediapicker.common.ui_theme.Dimens
-import com.scogo.mediapicker.compose.camera.CameraView
+import com.scogo.mediapicker.compose.activityMediaViewModel
 import com.scogo.mediapicker.compose.components.MediaView
+import com.scogo.mediapicker.compose.composeActivity
+import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.core.di.AppServiceLocator
 import com.scogo.mediapicker.core.media.MediaData
-import com.scogo.mediapicker.presentation.activityMediaViewModel
-import com.scogo.mediapicker.presentation.composeActivity
-import com.scogo.mediapicker.presentation.media.MediaViewModel
 import java.io.File
 import java.util.concurrent.Executor
 

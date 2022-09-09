@@ -1,4 +1,4 @@
-package com.scogo.mediapicker.presentation.navigation
+package com.scogo.mediapicker.compose.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -7,9 +7,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.scogo.mediapicker.compose.camera.CameraScreen
+import com.scogo.mediapicker.compose.media.MediaScreen
 import com.scogo.mediapicker.compose.permission.PermissionsScreen
-import com.scogo.mediapicker.presentation.camera.CameraScreen
-import com.scogo.mediapicker.presentation.media.MediaScreen
 import java.io.File
 
 internal sealed class Screen(val route: String) {

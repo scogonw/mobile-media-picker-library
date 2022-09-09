@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
-fun MediaView(
+internal fun MediaView(
     modifier: Modifier = Modifier,
     uri: Uri,
     isSelected: Boolean,

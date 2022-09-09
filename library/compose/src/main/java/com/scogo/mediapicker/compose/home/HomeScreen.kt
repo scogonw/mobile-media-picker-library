@@ -1,16 +1,14 @@
-package com.scogo.mediapicker.presentation.home
+package com.scogo.mediapicker.compose.home
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.scogo.mediapicker.presentation.navigation.AppNavigation
-import com.scogo.mediapicker.presentation.navigation.AppNavigationParams
+import com.scogo.mediapicker.compose.navigation.AppNavigation
+import com.scogo.mediapicker.compose.navigation.AppNavigationParams
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 internal fun HomeScreen(
     params: AppNavigationParams

@@ -1,4 +1,4 @@
-package com.scogo.mediapicker.presentation.media
+package com.scogo.mediapicker.compose.media
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

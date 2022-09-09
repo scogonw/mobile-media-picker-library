@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CircleCheckbox(
+internal fun CircleCheckbox(
     modifier: Modifier = Modifier,
     checked: Boolean = false,
     enabled: Boolean = true,

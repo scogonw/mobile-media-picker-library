@@ -1,4 +1,4 @@
-package com.scogo.mediapicker.presentation.home
+package com.scogo.mediapicker.compose.home
 
 import android.Manifest
 import android.os.Bundle
@@ -6,12 +6,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.scogo.mediapicker.common.ui_theme.ScogoTheme
+import com.scogo.mediapicker.compose.SharedViewModel
+import com.scogo.mediapicker.compose.media.MediaViewModel
+import com.scogo.mediapicker.compose.media.MediaViewModelFactory
+import com.scogo.mediapicker.compose.navigation.AppNavigationParams
 import com.scogo.mediapicker.core.data.impl.MediaRepositoryImpl
 import com.scogo.mediapicker.core.media.MediaPickerConfiguration
-import com.scogo.mediapicker.presentation.SharedViewModel
-import com.scogo.mediapicker.presentation.media.MediaViewModel
-import com.scogo.mediapicker.presentation.media.MediaViewModelFactory
-import com.scogo.mediapicker.presentation.navigation.AppNavigationParams
 import com.scogo.mediapicker.utils.getScogoMediaDirectory
 import com.scogo.mediapicker.utils.isPermissionsGranted
 

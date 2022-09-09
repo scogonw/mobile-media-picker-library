@@ -1,4 +1,4 @@
-package com.scogo.mediapicker.presentation.media
+package com.scogo.mediapicker.compose.media
 
 import android.net.Uri
 import androidx.compose.foundation.layout.*
@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.scogo.mediapicker.common.ui_theme.Dimens
+import com.scogo.mediapicker.compose.activityMediaViewModel
 import com.scogo.mediapicker.compose.components.MediaView
-import com.scogo.mediapicker.presentation.activityMediaViewModel
 
 @Composable
 internal fun MediaScreen(

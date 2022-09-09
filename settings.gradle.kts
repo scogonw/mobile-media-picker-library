@@ -25,7 +25,6 @@ includeBuild("build-logic") {
 include(":app")
 include(":library")
 include(":library:core")
-include(":library:presentation")
 include(":library:utils")
 include(":library:compose")
 include(":library:common")

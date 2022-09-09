@@ -29,7 +29,6 @@
             <option value="$PROJECT_DIR$/library/common/ui-theme" />
             <option value="$PROJECT_DIR$/library/compose" />
             <option value="$PROJECT_DIR$/library/core" />
-            <option value="$PROJECT_DIR$/library/presentation" />
             <option value="$PROJECT_DIR$/library/utils" />
           </set>
         </option>
