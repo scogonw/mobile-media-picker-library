@@ -19,10 +19,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.scogo.mediapicker.common.ui.components.MediaView
 import com.scogo.mediapicker.common.ui_res.R
 import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.compose.activityMediaViewModel
-import com.scogo.mediapicker.compose.components.MediaView
 import com.scogo.mediapicker.compose.composeActivity
 import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.core.di.AppServiceLocator

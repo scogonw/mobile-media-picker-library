@@ -1,4 +1,4 @@
-package com.scogo.mediapicker.compose.components
+package com.scogo.mediapicker.common.ui.components
 
 import android.view.MotionEvent
 import androidx.compose.animation.core.animateFloatAsState
@@ -14,7 +14,7 @@ import androidx.compose.ui.input.pointer.pointerInteropFilter
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun CameraActionIcon(
+fun CameraActionIcon(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     content: @Composable () -> Unit,

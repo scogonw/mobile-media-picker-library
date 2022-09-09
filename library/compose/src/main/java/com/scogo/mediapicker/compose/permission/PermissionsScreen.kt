@@ -28,7 +28,7 @@ import com.scogo.mediapicker.common.ui_theme.ScogoTheme
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun PermissionsScreen(
+internal fun PermissionsScreen(
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     permissions: List<String>,

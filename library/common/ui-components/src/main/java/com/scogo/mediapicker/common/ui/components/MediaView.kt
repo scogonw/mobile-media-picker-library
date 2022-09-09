@@ -1,4 +1,4 @@
-package com.scogo.mediapicker.compose.components
+package com.scogo.mediapicker.common.ui.components
 
 import android.net.Uri
 import androidx.compose.foundation.Image
@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
-internal fun MediaView(
+fun MediaView(
     modifier: Modifier = Modifier,
     uri: Uri,
     isSelected: Boolean,

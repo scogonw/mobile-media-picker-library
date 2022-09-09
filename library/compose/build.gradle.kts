@@ -4,6 +4,7 @@ plugins {
 dependencies {
     implementation(project(":library:common:ui-res"))
     implementation(project(":library:common:ui-theme"))
+    implementation(project(":library:common:ui-components"))
     implementation(project(":library:core"))
     implementation(project(":library:utils"))
     implementation(libs.bundles.android.ktx)

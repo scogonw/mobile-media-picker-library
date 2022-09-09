@@ -1,4 +1,4 @@
-package com.scogo.mediapicker.compose.components
+package com.scogo.mediapicker.common.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.offset
@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun CircleCheckbox(
+fun CircleCheckbox(
     modifier: Modifier = Modifier,
     checked: Boolean = false,
     enabled: Boolean = true,
