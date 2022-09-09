@@ -3,6 +3,9 @@ package com.scogo.mediapicker.utils
 import android.app.Activity
 import java.io.File
 
+fun Activity.getScogoMediaDirectory(): File {
+    return getMediaDirectory("Scogo")
+}
 fun Activity.getMediaDirectory(
     name: String,
 ): File {

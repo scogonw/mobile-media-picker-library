@@ -21,6 +21,9 @@ android_custom_view_container = "1.0.0"
 android_camerax = "1.1.0"
 android_accompanist = "0.25.1"
 android_hilt = "2.38.1"
+android_paging = "3.1.1"
+android_paging_compose = "1.0.0-alpha16"
+android_activity_ktx = "1.5.1"
 
 [libraries]
 gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
@@ -48,12 +51,16 @@ android_accompanist_permissions = { module = "com.google.accompanist:accompanist
 android_hilt_gradle_plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "android_hilt" }
 android_hilt = { module = "com.google.dagger:hilt-android", version.ref = "android_hilt" }
 android_hilt_compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "android_hilt" }
+android_paging = { module = "androidx.paging:paging-runtime", version.ref = "android_paging"}
+android_paging_compose = { module = "androidx.paging:paging-compose", version.ref = "android_paging_compose"}
+android_activity_ktx = { module = "androidx.activity:activity-ktx", version.ref = "android_activity_ktx"}
 
 [bundles]
 android_compose = ["android_compose_ui","android_compose_material", "android_compose_preview", "android_compose_activity", "android_compose_animation_graphics", "android_compose_navigation"]
 android_compose_debug = ["android_compose_tooling","android_compose_test_manifest","android_custom_view","android_custom_view_container"]
 android_camerax = ["android_camerax","android_camerax_lifecycle","android_camerax_view"]
 android_accompanist = ["android_accompanist_permissions"]
+android_ktx = ["android_activity_ktx"]
 
 [plugins]
 android_application = { id = "com.android.application", version.ref = "gradle" }

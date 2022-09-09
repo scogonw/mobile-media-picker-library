@@ -5,8 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.scogo.mediapicker.core.MediaPickerConfiguration
-import com.scogo.mediapicker.core.exception.ActivityNotFoundException
+import com.scogo.mediapicker.core.media.MediaPickerConfiguration
 import com.scogo.mediapicker.presentation.home.HomeActivity
 
 class MediaPicker private constructor(
@@ -30,9 +29,6 @@ class MediaPicker private constructor(
     fun pick(multiple: Boolean = configuration?.multipleAllowed ?: true,
              onImageSelected: (List<Uri>) -> Unit
     ) {
-        if(activity == null) {
-            throw ActivityNotFoundException()
-        }
         activity?.let {
             val intent = Intent(it,HomeActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP

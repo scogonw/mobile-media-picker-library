@@ -2,6 +2,8 @@ package com.scogo.mediapicker
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.Text
+import androidx.compose.ui.platform.ComposeView
 import com.scogo.mediapicker.presentation.picker.MediaPicker
 
 class MainActivity : AppCompatActivity() {
@@ -13,10 +15,12 @@ class MainActivity : AppCompatActivity() {
         val picker = MediaPicker.getInstance(
             activity = this
         )
-        picker.pick(
-            onImageSelected = {
+
+        findViewById<ComposeView>(R.id.composeView).setContent {
+            Text(text = "Hello")
+            picker.pick {
 
             }
-        )
+        }
     }
 }
