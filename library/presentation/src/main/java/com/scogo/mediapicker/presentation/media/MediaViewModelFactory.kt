@@ -6,7 +6,7 @@ import com.scogo.mediapicker.core.data.api.MediaRepository
 import com.scogo.mediapicker.core.media.MediaPickerConfiguration
 
 @Suppress("UNCHECKED_CAST")
-class MediaViewModelFactory(
+internal class MediaViewModelFactory(
     private val repo: MediaRepository,
     private val config: MediaPickerConfiguration
 ): ViewModelProvider.Factory {

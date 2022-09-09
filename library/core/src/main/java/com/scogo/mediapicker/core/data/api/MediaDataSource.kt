@@ -5,7 +5,7 @@ import androidx.paging.PagingState
 import com.scogo.mediapicker.core.media.MediaData
 
 class MediaDataSource(
-    private val onFetch: (limit: Int, offset: Int) -> List<MediaData>
+    private val onFetch: suspend (limit: Int, offset: Int) -> List<MediaData>
 ): PagingSource<Int, MediaData>() {
 
     override fun getRefreshKey(state: PagingState<Int, MediaData>): Int? {

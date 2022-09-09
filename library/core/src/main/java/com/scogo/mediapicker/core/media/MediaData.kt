@@ -5,6 +5,7 @@ import android.net.Uri
 data class MediaData(
     val id: Long,
     val uri: Uri?,
+    val thumbnail: Uri?,
     val mimeType: String?,
     val mediaType: Int?,
     val displayName: String?,
@@ -17,6 +18,7 @@ data class MediaData(
         val EMPTY = MediaData(
             id = 0,
             uri = null,
+            thumbnail = null,
             mimeType = null,
             mediaType = null,
             displayName = null,

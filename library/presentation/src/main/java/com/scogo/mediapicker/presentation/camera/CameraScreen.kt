@@ -4,6 +4,7 @@ import android.media.MediaActionSound
 import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -33,6 +34,7 @@ import java.util.concurrent.Executor
 @Composable
 internal fun CameraScreen(
     outputDir: File,
+    navigateToMedia: () -> Unit,
 ) {
     val activity = composeActivity()
     CameraScreen(
@@ -46,6 +48,7 @@ internal fun CameraScreen(
         onError = {
 
         },
+        navigateToMedia = navigateToMedia,
         onBackPress = {
             activity.finish()
         }
@@ -60,6 +63,7 @@ private fun CameraScreen(
     executor: Executor,
     onImageCaptured: (Uri) -> Unit,
     onError: (Exception) -> Unit,
+    navigateToMedia: () -> Unit,
     onBackPress: () -> Unit,
 ) {
     val mediaList = mediaViewModel.getMediaList().collectAsLazyPagingItems()
@@ -74,10 +78,18 @@ private fun CameraScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    modifier = Modifier.size(Dimens.Three),
-                    painter = painterResource(id = R.drawable.arrow_down),
+                    modifier = Modifier
+                        .size(Dimens.Three)
+                        .clickable {
+                            navigateToMedia()
+                        },
+                    painter = painterResource(
+                        id = R.drawable.arrow_down
+                    ),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                    colorFilter = ColorFilter.tint(
+                        color = MaterialTheme.colors.onBackground
+                    )
                 )
                 Spacer(modifier = Modifier.height(Dimens.One))
                 MediaHorizontalList(
@@ -101,15 +113,21 @@ internal fun MediaHorizontalList(
         state = state,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        items(lazyMediaList.itemCount) {
-            lazyMediaList[it]?.let { media ->
-                MediaView(
-                    modifier = Modifier.size(Dimens.Nine),
-                    uri = media.uri ?: Uri.EMPTY,
-                    isSelected = media.selected
-                )
+        items(
+            count = lazyMediaList.itemCount,
+            key = {
+                lazyMediaList[it]?.id ?: it
+            },
+            itemContent =  {
+                lazyMediaList[it]?.let { media ->
+                    MediaView(
+                        modifier = Modifier.size(Dimens.Nine),
+                        uri = media.uri ?: Uri.EMPTY,
+                        isSelected = media.selected
+                    )
+                }
             }
-        }
+        )
     }
 }
 

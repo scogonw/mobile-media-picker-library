@@ -7,19 +7,19 @@ import com.scogo.mediapicker.presentation.home.HomeActivity
 import com.scogo.mediapicker.presentation.media.MediaViewModel
 
 @Composable
-fun composeActivity(): Activity {
+internal fun composeActivity(): Activity {
     val context = LocalContext.current
     return (context as Activity)
 }
 
 @Composable
-fun activityMediaViewModel(): MediaViewModel {
+internal fun activityMediaViewModel(): MediaViewModel {
     val context = LocalContext.current
     return (context as HomeActivity).mediaViewModel
 }
 
 @Composable
-fun activitySharedViewModel(): SharedViewModel {
+internal fun activitySharedViewModel(): SharedViewModel {
     val context = LocalContext.current
     return (context as HomeActivity).viewModel
 }

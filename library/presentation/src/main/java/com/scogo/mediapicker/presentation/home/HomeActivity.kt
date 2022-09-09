@@ -15,7 +15,7 @@ import com.scogo.mediapicker.presentation.navigation.AppNavigationParams
 import com.scogo.mediapicker.utils.getScogoMediaDirectory
 import com.scogo.mediapicker.utils.isPermissionsGranted
 
-class HomeActivity: ComponentActivity() {
+internal class HomeActivity: ComponentActivity() {
 
     val viewModel: SharedViewModel by viewModels()
     val mediaViewModel: MediaViewModel by viewModels {

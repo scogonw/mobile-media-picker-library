@@ -11,7 +11,7 @@ import com.scogo.mediapicker.core.media.MediaData
 import com.scogo.mediapicker.core.media.MediaPickerConfiguration
 import kotlinx.coroutines.flow.Flow
 
-class MediaViewModel(
+internal class MediaViewModel(
     private val repo: MediaRepository,
     private val config: MediaPickerConfiguration,
 ): ViewModel() {
@@ -19,8 +19,8 @@ class MediaViewModel(
     fun getMediaList(): Flow<PagingData<MediaData>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 50,
-                initialLoadSize = 50,
+                pageSize = 30,
+                initialLoadSize = 30,
                 enablePlaceholders = true
             ),
             pagingSourceFactory = {

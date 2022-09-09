@@ -75,14 +75,14 @@ private fun NavGraphBuilder.addPermissionScreen(
     permissions: List<String>,
 ) {
     composable(
-        route = NavScreen.Permissions.createRoute(root),
+        route = NavScreen.Permissions.createRoute(),
         content = {
             PermissionsScreen(
                 permissions = permissions,
                 navigateToCamera = {
-                    navController.navigate(NavScreen.Camera.createRoute(root)) {
+                    navController.navigate(NavScreen.Camera.createRoute()) {
                         launchSingleTop = true
-                        popUpTo(NavScreen.Permissions.createRoute(root)) {
+                        popUpTo(NavScreen.Permissions.createRoute()) {
                             inclusive = true
                         }
                     }
@@ -97,10 +97,13 @@ private fun NavGraphBuilder.addCameraScreen(
     outputDir: File,
 ) {
     composable(
-        route = NavScreen.Camera.createRoute(root),
+        route = NavScreen.Camera.createRoute(),
         content = {
             CameraScreen(
-                outputDir = outputDir
+                outputDir = outputDir,
+                navigateToMedia = {
+                    navController.navigate(NavScreen.Media.createRoute())
+                }
             )
         }
     )
@@ -110,9 +113,13 @@ private fun NavGraphBuilder.addMediaScreen(
     root: Screen,
 ) {
     composable(
-        route = NavScreen.Media.createRoute(root),
+        route = NavScreen.Media.createRoute(),
         content = {
-            MediaScreen()
+            MediaScreen(
+                navigateToPreview = {
+
+                }
+            )
         }
     )
 }

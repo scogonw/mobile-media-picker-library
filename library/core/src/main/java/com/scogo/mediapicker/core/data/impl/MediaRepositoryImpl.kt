@@ -7,6 +7,8 @@ import com.scogo.mediapicker.core.data.api.MediaRepository
 import com.scogo.mediapicker.core.media.MediaData
 import com.scogo.mediapicker.core.media.createMediaCursor
 import com.scogo.mediapicker.core.media.fetchMedia
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MediaRepositoryImpl(
     private val context: Context
@@ -25,7 +27,9 @@ class MediaRepositoryImpl(
 
     override fun getMediaPagingSource(): PagingSource<Int, MediaData> {
         return MediaDataSource { limit, offset ->
-            context.fetchMedia(limit, offset)
+            withContext(Dispatchers.IO) {
+                context.fetchMedia(limit, offset)
+            }
         }
     }
 

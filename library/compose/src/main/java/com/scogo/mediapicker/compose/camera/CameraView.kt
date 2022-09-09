@@ -33,6 +33,7 @@ import java.util.concurrent.Executor
 
 @Composable
 fun CameraView(
+    modifier: Modifier = Modifier,
     outputDirectory: File,
     executor: Executor,
     mediaActionSound: MediaActionSound,
@@ -76,7 +77,7 @@ fun CameraView(
 
     Box(
         contentAlignment = Alignment.BottomCenter,
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         AndroidView(
             factory = {

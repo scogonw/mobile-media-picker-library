@@ -85,6 +85,7 @@ fun Context.fetchMedia(
                 MediaData(
                     id = id,
                     uri = contentUri,
+                    thumbnail = null,
                     mimeType = mimeType,
                     mediaType = mediaType,
                     displayName = displayName,
