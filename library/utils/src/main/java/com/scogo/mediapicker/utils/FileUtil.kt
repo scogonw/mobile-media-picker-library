@@ -40,21 +40,21 @@ object FileUtil {
         uri: Uri,
         destinationPath: String?
     ) {
-        var `is`: InputStream? = null
+        var inputStream: InputStream? = null
         var bos: BufferedOutputStream? = null
         try {
-            `is` = context.contentResolver.openInputStream(uri)
+            inputStream = context.contentResolver.openInputStream(uri)
             bos = BufferedOutputStream(FileOutputStream(destinationPath, false))
             val buf = ByteArray(1024)
-            `is`?.read(buf)
+            inputStream?.read(buf)
             do {
                 bos.write(buf)
-            } while (`is`?.read(buf) !== -1)
+            } while (inputStream?.read(buf) !== -1)
         } catch (e: IOException) {
             e.printStackTrace()
         } finally {
             try {
-                `is`?.close()
+                inputStream?.close()
                 bos?.close()
             } catch (e: IOException) {
                 e.printStackTrace()
