@@ -22,13 +22,14 @@ fun ScogoTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
+    //we don't need dark theme
     val colors = if(darkTheme) {
         DarkColorPalette
     } else {
         LightColorPalette
     }
     MaterialTheme(
-        colors = colors,
+        colors = LightColorPalette,
         shapes = Shapes,
         typography = Typography,
         content = content
