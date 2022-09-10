@@ -9,13 +9,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -24,16 +24,18 @@ import com.scogo.mediapicker.common.ui_res.R
 import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.compose.activityMediaViewModel
 import com.scogo.mediapicker.compose.composeActivity
+import com.scogo.mediapicker.compose.media.MediaScreen
 import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.core.di.AppServiceLocator
 import com.scogo.mediapicker.core.media.MediaData
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.concurrent.Executor
 
 @Composable
 internal fun CameraScreen(
     outputDir: File,
-    navigateToMedia: () -> Unit,
+    navigateToPreview: (MediaData) -> Unit,
 ) {
     val activity = composeActivity()
     CameraScreen(
@@ -47,13 +49,14 @@ internal fun CameraScreen(
         onError = {
 
         },
-        navigateToMedia = navigateToMedia,
+        navigateToPreview = navigateToPreview,
         onBackPress = {
             activity.finish()
         }
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun CameraScreen(
     mediaViewModel: MediaViewModel,
@@ -62,50 +65,103 @@ private fun CameraScreen(
     executor: Executor,
     onImageCaptured: (Uri) -> Unit,
     onError: (Exception) -> Unit,
-    navigateToMedia: () -> Unit,
+    navigateToPreview: (MediaData) -> Unit,
     onBackPress: () -> Unit,
 ) {
-    val mediaList = mediaViewModel.getMediaList().collectAsLazyPagingItems()
-    BackHandler(onBack = onBackPress)
+    val scope = rememberCoroutineScope()
 
-    CameraView(
-        outputDirectory = outputDir,
-        executor = executor,
-        mediaActionSound = sound,
-        footerContent = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    modifier = Modifier
-                        .size(Dimens.Three)
-                        .clickable {
-                            navigateToMedia()
-                        },
-                    painter = painterResource(
-                        id = R.drawable.arrow_down
-                    ),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(
-                        color = MaterialTheme.colors.onBackground
-                    )
-                )
-                Spacer(modifier = Modifier.height(Dimens.One))
-                MediaHorizontalList(
-                    lazyMediaList = mediaList
-                )
-            }
-        },
-        onImageCaptured = onImageCaptured,
-        onError = onError
+    val sheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        confirmStateChange =  {
+            it != ModalBottomSheetValue.HalfExpanded
+        }
     )
+
+    BackHandler {
+        scope.launch {
+            if(sheetState.isVisible) {
+                sheetState.hide()
+            }else {
+                onBackPress()
+            }
+        }
+    }
+
+    val mediaList = mediaViewModel.getMediaList().collectAsLazyPagingItems()
+
+    ModalBottomSheetLayout(
+        modifier = Modifier.fillMaxSize(),
+        sheetState = sheetState,
+        sheetContent = {
+            MediaScreen(
+                navigateToPreview = navigateToPreview
+            )
+        },
+        content =  {
+            CameraView(
+                outputDirectory = outputDir,
+                executor = executor,
+                mediaActionSound = sound,
+                footerContent = {
+                    CameraFooter(
+                        navigateToMedia = {
+                            scope.launch {
+                                sheetState.animateTo(ModalBottomSheetValue.Expanded)
+                            }
+                        },
+                        onMediaListItemClick = navigateToPreview,
+                        lazyMediaList = mediaList
+                    )
+                },
+                onImageCaptured = onImageCaptured,
+                onError = onError
+            )
+        }
+    )
+}
+
+@Composable
+internal fun CameraFooter(
+    navigateToMedia: () -> Unit,
+    onMediaListItemClick: (MediaData) -> Unit,
+    lazyMediaList: LazyPagingItems<MediaData>,
+) {
+    val listState = rememberLazyListState()
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            modifier = Modifier
+                .size(Dimens.Three)
+                .clickable {
+                    navigateToMedia()
+                },
+            painter = painterResource(
+                id = R.drawable.arrow_down
+            ),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(
+                color = MaterialTheme.colors.onBackground
+            )
+        )
+
+        Spacer(modifier = Modifier.height(Dimens.One))
+
+        MediaHorizontalList(
+            state = listState,
+            lazyMediaList = lazyMediaList,
+            onItemClick = onMediaListItemClick
+        )
+    }
 }
 
 @Composable
 internal fun MediaHorizontalList(
     modifier: Modifier = Modifier,
-    state: LazyListState = rememberLazyListState(),
-    lazyMediaList: LazyPagingItems<MediaData>
+    state: LazyListState,
+    lazyMediaList: LazyPagingItems<MediaData>,
+    onItemClick: (MediaData) -> Unit,
 ) {
     LazyRow(
         modifier = modifier.fillMaxWidth(),
@@ -119,19 +175,20 @@ internal fun MediaHorizontalList(
             },
             itemContent =  {
                 lazyMediaList[it]?.let { media ->
-                    MediaView(
-                        modifier = Modifier.size(Dimens.Nine),
-                        uri = media.uri ?: Uri.EMPTY,
-                        isSelected = media.selected
-                    )
+                    media.uri?.let { uri ->
+                        MediaView(
+                            modifier = Modifier
+                                .size(Dimens.Nine)
+                                .clickable {
+                                    onItemClick(media)
+                                }
+                            ,
+                            uri = uri,
+                            isSelected = media.selected
+                        )
+                    }
                 }
             }
         )
     }
-}
-
-@Preview
-@Composable
-private fun CameraScreenPreview() {
-    
 }
