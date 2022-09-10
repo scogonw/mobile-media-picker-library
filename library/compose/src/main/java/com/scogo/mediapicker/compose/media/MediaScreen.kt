@@ -71,7 +71,7 @@ internal fun MediaVerticalGridList(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(Dimens.Sixteen)
-                                .padding(Dimens.HalfQuarter)
+                                .padding(Dimens.OneHalf)
                                 .clickable {
                                     onItemClick(media)
                                 }

@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.dp
 
 object Dimens {
     val Zero = 0.dp
+    val OneHalf = 0.5.dp
     val HalfQuarter = 1.dp
     val Quarter = 2.dp
     val Half = 4.dp

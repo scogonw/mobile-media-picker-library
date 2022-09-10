@@ -9,11 +9,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -104,13 +108,13 @@ private fun CameraScreen(
                 mediaActionSound = sound,
                 footerContent = {
                     CameraFooter(
+                        lazyMediaList = mediaList,
+                        onMediaListItemClick = navigateToPreview,
                         navigateToMedia = {
                             scope.launch {
                                 sheetState.animateTo(ModalBottomSheetValue.Expanded)
                             }
                         },
-                        onMediaListItemClick = navigateToPreview,
-                        lazyMediaList = mediaList
                     )
                 },
                 onImageCaptured = onImageCaptured,
@@ -122,13 +126,15 @@ private fun CameraScreen(
 
 @Composable
 internal fun CameraFooter(
+    modifier: Modifier = Modifier,
+    lazyMediaList: LazyPagingItems<MediaData>,
     navigateToMedia: () -> Unit,
     onMediaListItemClick: (MediaData) -> Unit,
-    lazyMediaList: LazyPagingItems<MediaData>,
 ) {
     val listState = rememberLazyListState()
 
     Column(
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
@@ -142,7 +148,7 @@ internal fun CameraFooter(
             ),
             contentDescription = null,
             colorFilter = ColorFilter.tint(
-                color = MaterialTheme.colors.onBackground
+                color = Color.White
             )
         )
 
