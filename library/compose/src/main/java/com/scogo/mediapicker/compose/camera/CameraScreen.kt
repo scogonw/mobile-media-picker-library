@@ -26,8 +26,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.scogo.mediapicker.common.ui.components.MediaView
 import com.scogo.mediapicker.common.ui_res.R
 import com.scogo.mediapicker.common.ui_theme.Dimens
-import com.scogo.mediapicker.compose.activityMediaViewModel
-import com.scogo.mediapicker.compose.composeActivity
+import com.scogo.mediapicker.compose.*
 import com.scogo.mediapicker.compose.media.MediaScreen
 import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.core.di.AppServiceLocator
@@ -84,7 +83,7 @@ private fun CameraScreen(
     BackHandler {
         scope.launch {
             if(sheetState.isVisible) {
-                sheetState.hide()
+                sheetState.animatedHide()
             }else {
                 onBackPress()
             }
@@ -98,11 +97,23 @@ private fun CameraScreen(
         sheetState = sheetState,
         sheetContent = {
             MediaScreen(
-                navigateToPreview = navigateToPreview
+                navigateToPreview = navigateToPreview,
+                onBack = {
+                    scope.launch {
+                        sheetState.animatedHide()
+                    }
+                }
             )
         },
         content =  {
             CameraView(
+                modifier = Modifier.onSwipe(
+                    onUp = {
+                        scope.launch {
+                            sheetState.animatedShow()
+                        }
+                    }
+                ),
                 outputDirectory = outputDir,
                 executor = executor,
                 mediaActionSound = sound,
@@ -110,11 +121,6 @@ private fun CameraScreen(
                     CameraFooter(
                         lazyMediaList = mediaList,
                         onMediaListItemClick = navigateToPreview,
-                        navigateToMedia = {
-                            scope.launch {
-                                sheetState.animateTo(ModalBottomSheetValue.Expanded)
-                            }
-                        },
                     )
                 },
                 onImageCaptured = onImageCaptured,
@@ -128,7 +134,6 @@ private fun CameraScreen(
 internal fun CameraFooter(
     modifier: Modifier = Modifier,
     lazyMediaList: LazyPagingItems<MediaData>,
-    navigateToMedia: () -> Unit,
     onMediaListItemClick: (MediaData) -> Unit,
 ) {
     val listState = rememberLazyListState()
@@ -138,11 +143,7 @@ internal fun CameraFooter(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier
-                .size(Dimens.Three)
-                .clickable {
-                    navigateToMedia()
-                },
+            modifier = Modifier.size(Dimens.Three),
             painter = painterResource(
                 id = R.drawable.arrow_down
             ),

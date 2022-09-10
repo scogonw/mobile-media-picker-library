@@ -21,6 +21,7 @@ import com.scogo.mediapicker.core.media.MediaData
 fun MediaScreen(
     modifier: Modifier = Modifier,
     navigateToPreview: (MediaData) -> Unit,
+    onBack: () -> Unit,
 ) {
     val viewModel = activityMediaViewModel()
     val scaffoldState = rememberScaffoldState()
