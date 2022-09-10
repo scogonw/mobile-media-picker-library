@@ -1,6 +1,5 @@
 package com.scogo.mediapicker.compose.media
 
-import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -46,10 +45,6 @@ private fun MediaScreenView(
                     columns = GridCells.Adaptive(
                         minSize = Dimens.Sixteen
                     ),
-                    contentPadding = PaddingValues(
-                        horizontal = Dimens.One,
-                        vertical = Dimens.One
-                    ),
                     content = {
                         items(
                             count = mediaList.itemCount,
@@ -58,11 +53,17 @@ private fun MediaScreenView(
                             }
                         ) {
                             mediaList[it]?.let { media ->
-                                MediaView(
-                                    modifier = Modifier.size(Dimens.Sixteen),
-                                    uri = media.uri ?: Uri.EMPTY,
-                                    isSelected = media.selected
-                                )
+                                media.uri?.let { uri ->
+                                    MediaView(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(Dimens.Sixteen)
+                                            .padding(Dimens.HalfQuarter)
+                                        ,
+                                        uri = uri,
+                                        isSelected = media.selected
+                                    )
+                                }
                             }
                         }
                     }
