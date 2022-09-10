@@ -4,6 +4,7 @@
     <application>
         <activity
             android:name="com.scogo.mediapicker.compose.home.HomeActivity"
-            android:exported="true"/>
+            android:exported="true"
+            />
     </application>
 </manifest>

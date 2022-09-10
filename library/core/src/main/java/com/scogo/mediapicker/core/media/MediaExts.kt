@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
+import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.core.os.bundleOf
@@ -78,7 +79,7 @@ fun Context.fetchMedia(
             val mediaType = it.getInt(mediaTypeColumn)
             val mimeType = it.getString(mimeTypeColumn)
             val contentUri = ContentUris.withAppendedId(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                getImageVideoUri(),
                 id
             )
             mediaList.add(
@@ -99,4 +100,12 @@ fun Context.fetchMedia(
     }
     cursor?.close()
     return mediaList
+}
+
+private fun getImageVideoUri(): Uri {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL)
+    } else {
+        MediaStore.Files.getContentUri(externalUri)
+    }
 }
