@@ -20,6 +20,7 @@ internal class MediaViewModel(
         return Pager(
             config = PagingConfig(
                 pageSize = 100,
+                prefetchDistance = 50,
                 initialLoadSize = 100,
                 enablePlaceholders = true
             ),
