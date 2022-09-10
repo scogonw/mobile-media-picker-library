@@ -27,11 +27,15 @@
         <entry key="../../../../../layout/compose-model-1662711501400.xml" value="0.1" />
         <entry key="../../../../../layout/compose-model-1662723325524.xml" value="0.1" />
         <entry key="../../../../../layout/compose-model-1662723390270.xml" value="0.1" />
+        <entry key="../../../../../layout/compose-model-1662783472563.xml" value="0.625" />
         <entry key="../../../../layout/compose-model-1662382074984.xml" value="0.335" />
         <entry key="../../../../layout/compose-model-1662463569020.xml" value="0.25" />
         <entry key="../../../../layout/compose-model-1662465124434.xml" value="0.26055743243243246" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2682291666666667" />
+        <entry key="library/common/ui-res/src/main/res/drawable/arrow_down.xml" value="0.1" />
+        <entry key="library/common/ui-res/src/main/res/drawable/ic_baseline_image_24.xml" value="0.1" />
         <entry key="library/common/ui-res/src/main/res/drawable/ic_baseline_keyboard_arrow_down_24.xml" value="0.1515" />
+        <entry key="library/common/ui-res/src/main/res/drawable/image_placeholder.xml" value="0.1" />
       </map>
     </option>
   </component>

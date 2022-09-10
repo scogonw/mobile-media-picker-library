@@ -2,6 +2,7 @@ plugins {
     id("scogo_android_compose_lib")
 }
 dependencies {
+    implementation(project(":library:common:ui-res"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.bundles.android.ktx)
     implementation(libs.bundles.android.compose)

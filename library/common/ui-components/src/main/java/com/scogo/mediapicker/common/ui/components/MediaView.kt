@@ -24,9 +24,7 @@ fun MediaView(
         content = {
             Image(
                 modifier = modifier,
-                painter = rememberAsyncImagePainter(
-                    model = uri,
-                ),
+                painter = rememberAsyncImagePainter(uri),
                 contentScale = ContentScale.Crop,
                 contentDescription = null
             )

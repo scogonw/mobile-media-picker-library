@@ -55,17 +55,16 @@ private fun MediaScreenView(
                             count = mediaList.itemCount,
                             key = {
                                 mediaList[it]?.id ?: it
-                            },
-                            itemContent = {
-                                mediaList[it]?.let { media ->
-                                    MediaView(
-                                        modifier = Modifier.size(Dimens.Sixteen),
-                                        uri = media.uri ?: Uri.EMPTY,
-                                        isSelected = media.selected
-                                    )
-                                }
                             }
-                        )
+                        ) {
+                            mediaList[it]?.let { media ->
+                                MediaView(
+                                    modifier = Modifier.size(Dimens.Sixteen),
+                                    uri = media.uri ?: Uri.EMPTY,
+                                    isSelected = media.selected
+                                )
+                            }
+                        }
                     }
                 )
             }

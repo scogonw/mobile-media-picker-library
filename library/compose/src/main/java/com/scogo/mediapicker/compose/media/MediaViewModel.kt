@@ -19,8 +19,8 @@ internal class MediaViewModel(
     fun getMediaList(): Flow<PagingData<MediaData>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 30,
-                initialLoadSize = 30,
+                pageSize = 100,
+                initialLoadSize = 100,
                 enablePlaceholders = true
             ),
             pagingSourceFactory = {

@@ -25,6 +25,7 @@ android_paging = "3.1.1"
 android_paging_compose = "1.0.0-alpha16"
 android_activity_ktx = "1.5.1"
 apache_commons = "2.4"
+android_glide = "4.13.2"
 
 [libraries]
 gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
@@ -56,6 +57,8 @@ android_paging = { module = "androidx.paging:paging-runtime", version.ref = "and
 android_paging_compose = { module = "androidx.paging:paging-compose", version.ref = "android_paging_compose"}
 android_activity_ktx = { module = "androidx.activity:activity-ktx", version.ref = "android_activity_ktx"}
 apache_commons = { module = "org.apache.directory.studio:org.apache.commons.io", version.ref = "apache_commons" }
+android_glide = { module = "com.github.bumptech.glide:glide", version.ref = "android_glide" }
+android_glide_compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "android_glide" }
 
 [bundles]
 android_compose = ["android_compose_ui","android_compose_material", "android_compose_preview", "android_compose_activity", "android_compose_animation_graphics", "android_compose_navigation"]

@@ -11,7 +11,6 @@ dependencies {
     implementation(libs.bundles.android.compose)
     debugImplementation(libs.bundles.android.compose.debug)
     implementation(libs.android.compose.material.icons)
-    implementation(libs.android.compose.coil)
     implementation(libs.bundles.android.camerax)
     implementation(libs.android.paging)
     implementation(libs.android.paging.compose)
