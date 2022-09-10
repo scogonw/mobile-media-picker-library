@@ -188,7 +188,7 @@ internal fun MediaHorizontalList(
             },
             itemContent =  {
                 lazyMediaList[it]?.let { media ->
-                    media.uri?.let { uri ->
+                    if(media.uri != null) {
                         MediaView(
                             modifier = Modifier
                                 .size(Dimens.Nine)
@@ -196,8 +196,7 @@ internal fun MediaHorizontalList(
                                     onItemClick(media)
                                 }
                             ,
-                            uri = uri,
-                            isSelected = media.selected
+                            media = media
                         )
                     }
                 }

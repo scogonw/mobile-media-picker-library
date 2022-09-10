@@ -85,7 +85,7 @@ internal fun MediaVerticalGridList(
                 }
             ) {
                 lazyMediaList[it]?.let { media ->
-                    media.uri?.let { uri ->
+                    if(media.uri != null) {
                         MediaView(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -95,8 +95,7 @@ internal fun MediaVerticalGridList(
                                     onItemClick(media)
                                 }
                             ,
-                            uri = uri,
-                            isSelected = media.selected
+                            media = media
                         )
                     }
                 }
