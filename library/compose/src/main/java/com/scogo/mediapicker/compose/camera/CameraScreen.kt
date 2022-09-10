@@ -3,6 +3,8 @@ package com.scogo.mediapicker.compose.camera
 import android.media.MediaActionSound
 import android.net.Uri
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -75,9 +77,13 @@ private fun CameraScreen(
 
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
+        skipHalfExpanded = true,
         confirmStateChange =  {
             it != ModalBottomSheetValue.HalfExpanded
-        }
+        },
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+        )
     )
 
     BackHandler {
