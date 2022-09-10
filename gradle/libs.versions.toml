@@ -50,6 +50,7 @@ android_camerax = { module = "androidx.camera:camera-camera2", version.ref = "an
 android_camerax_lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "android_camerax" }
 android_camerax_view = { module = "androidx.camera:camera-view", version.ref = "android_camerax" }
 android_accompanist_permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "android_accompanist" }
+android_accompanist_system_ui = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "android_accompanist" }
 android_hilt_gradle_plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "android_hilt" }
 android_hilt = { module = "com.google.dagger:hilt-android", version.ref = "android_hilt" }
 android_hilt_compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "android_hilt" }
@@ -64,7 +65,7 @@ android_glide_compiler = { module = "com.github.bumptech.glide:compiler", versio
 android_compose = ["android_compose_ui","android_compose_material", "android_compose_preview", "android_compose_activity", "android_compose_animation_graphics", "android_compose_navigation"]
 android_compose_debug = ["android_compose_tooling","android_compose_test_manifest","android_custom_view","android_custom_view_container"]
 android_camerax = ["android_camerax","android_camerax_lifecycle","android_camerax_view"]
-android_accompanist = ["android_accompanist_permissions"]
+android_accompanist = ["android_accompanist_permissions","android_accompanist_system_ui"]
 android_ktx = ["android_activity_ktx"]
 
 [plugins]
