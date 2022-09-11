@@ -4,16 +4,23 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import coil.compose.AsyncImage
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.scogo.mediapicker.common.ui_res.R
 
 @SuppressLint("CheckResult")
 @Composable
@@ -41,4 +48,27 @@ fun loadThumbnail(
             }
         })
     return state
+}
+
+@Composable
+fun FastAsyncImage(
+    modifier: Modifier,
+    model: Any?,
+    @DrawableRes placeholder: Int = R.drawable.image_placeholder,
+){
+    val request = ImageRequest
+        .Builder(LocalContext.current)
+        .data(model)
+        .placeholder(placeholder)
+        .allowHardware(false)
+        .diskCachePolicy(CachePolicy.ENABLED)
+        .size(300)
+        .build()
+
+    AsyncImage(
+        modifier = modifier,
+        model = request,
+        contentScale = ContentScale.Crop,
+        contentDescription = null
+    )
 }
