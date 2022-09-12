@@ -12,4 +12,7 @@ dependencies {
     implementation(libs.android.compose.material.icons)
     implementation(libs.android.glide)
     annotationProcessor(libs.android.glide.compiler)
+    implementation(libs.android.paging)
+    implementation(libs.android.paging.compose)
+
 }
