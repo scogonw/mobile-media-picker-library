@@ -1,7 +1,6 @@
 package com.scogo.mediapicker.common.ui.components
 
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -26,14 +25,9 @@ fun MediaView(
             AndroidView(
                 modifier = modifier,
                 factory = {
-                    ImageView(it).load(
-                        source = media.uri
-                    ).apply {
-                        val params = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.MATCH_PARENT
-                        )
-                        layoutParams = params
+                    ImageView(it).apply {
+                        load(source = media.uri)
+                        maxSize()
                     }
                 }
             )
