@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
@@ -33,6 +34,8 @@ import com.scogo.mediapicker.compose.media.MediaScreen
 import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.core.di.AppServiceLocator
 import com.scogo.mediapicker.core.media.MediaData
+import com.scogo.mediapicker.utils.FileUtil
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.concurrent.Executor
@@ -43,13 +46,18 @@ internal fun CameraScreen(
     navigateToPreview: (MediaData) -> Unit,
 ) {
     val activity = composeActivity()
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     CameraScreen(
         mediaViewModel = activityMediaViewModel(),
         sound = AppServiceLocator.mediaSound,
         outputDir = outputDir,
         executor = AppServiceLocator.executor,
         onImageCaptured = {
-
+            scope.launch(Dispatchers.IO) {
+                FileUtil.saveImage(context,it)
+            }
         },
         onError = {
 
@@ -78,7 +86,7 @@ private fun CameraScreen(
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
         skipHalfExpanded = true,
-        confirmStateChange =  {
+        confirmStateChange = {
             it != ModalBottomSheetValue.HalfExpanded
         },
         animationSpec = spring(
@@ -88,9 +96,9 @@ private fun CameraScreen(
 
     BackHandler {
         scope.launch {
-            if(sheetState.isVisible) {
+            if (sheetState.isVisible) {
                 sheetState.animatedHide()
-            }else {
+            } else {
                 onBackPress()
             }
         }
@@ -111,7 +119,7 @@ private fun CameraScreen(
                 }
             )
         },
-        content =  {
+        content = {
             CameraView(
                 modifier = Modifier.onSwipe(
                     onUp = {
@@ -186,16 +194,15 @@ internal fun MediaHorizontalList(
             key = {
                 lazyMediaList[it]?.id ?: it
             },
-            itemContent =  {
+            itemContent = {
                 lazyMediaList[it]?.let { media ->
-                    if(media.uri != null) {
+                    if (media.uri != null) {
                         MediaView(
                             modifier = Modifier
                                 .size(Dimens.Nine)
                                 .clickable {
                                     onItemClick(media)
-                                }
-                            ,
+                                },
                             media = media
                         )
                     }

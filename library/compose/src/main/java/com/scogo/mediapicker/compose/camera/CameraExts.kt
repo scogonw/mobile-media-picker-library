@@ -29,7 +29,7 @@ internal fun ImageCapture.takePhoto(
     onImageSaved: (Uri) -> Unit,
     onError: (Exception) -> Unit,
 ){
-    val outputFile = File(outputDirectory,UUID.randomUUID().toString()+".jpg")
+    val outputFile = File(outputDirectory,UUID.randomUUID().toString() + ".jpeg")
     val outputOptions = ImageCapture.OutputFileOptions
         .Builder(outputFile)
         .build()
