@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
@@ -22,6 +23,23 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.scogo.mediapicker.common.ui_res.R
+
+@SuppressLint("CheckResult")
+fun ImageView.load(
+    source: Any?,
+    @DrawableRes placeholder: Int = R.drawable.image_placeholder,
+): ImageView {
+    val options = RequestOptions().apply {
+        placeholder(placeholder)
+        centerCrop()
+        diskCacheStrategy(DiskCacheStrategy.ALL)
+    }
+    Glide.with(context)
+        .load(source)
+        .apply(options)
+        .into(this)
+    return this
+}
 
 @SuppressLint("CheckResult")
 @Composable
