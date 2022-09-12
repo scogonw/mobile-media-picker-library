@@ -17,6 +17,7 @@ object Dimens {
     val Seven = 56.dp
     val Eight = 64.dp
     val Nine = 72.dp
+    val Twelve = 96.dp
     val Sixteen = 128.dp
 }
 object ButtonDimes {

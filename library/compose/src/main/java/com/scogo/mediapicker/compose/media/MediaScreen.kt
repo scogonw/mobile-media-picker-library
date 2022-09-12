@@ -75,7 +75,7 @@ internal fun MediaVerticalGridList(
         modifier = modifier,
         state = state,
         columns = GridCells.Adaptive(
-            minSize = Dimens.Sixteen
+            minSize = Dimens.Twelve
         ),
         content = {
             items(
@@ -89,7 +89,7 @@ internal fun MediaVerticalGridList(
                         MediaView(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(Dimens.Sixteen)
+                                .height(Dimens.Twelve)
                                 .padding(Dimens.OneHalf)
                                 .clickable {
                                     onItemClick(media)
