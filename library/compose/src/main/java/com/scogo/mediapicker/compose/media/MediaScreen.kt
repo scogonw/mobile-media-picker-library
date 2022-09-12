@@ -15,22 +15,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.scogo.mediapicker.common.ui.components.MediaView
 import com.scogo.mediapicker.common.ui_theme.Dimens
-import com.scogo.mediapicker.compose.activityMediaViewModel
 import com.scogo.mediapicker.core.media.MediaData
 
 @Composable
 fun MediaScreen(
     modifier: Modifier = Modifier,
+    mediaList: LazyPagingItems<MediaData>,
     navigateToPreview: (MediaData) -> Unit,
     onBack: () -> Unit,
 ) {
-    val viewModel = activityMediaViewModel()
     val scaffoldState = rememberScaffoldState()
-
-    val mediaList = viewModel.getMediaList().collectAsLazyPagingItems()
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -102,7 +98,7 @@ internal fun MediaVerticalGridList(
             }
 
             items(
-               items.chunked(rowSize)
+               items.chunked(rowSize),
             ) { row ->
                 Row(Modifier.fillParentMaxWidth()) {
                     for ((index, media) in row.withIndex()) {

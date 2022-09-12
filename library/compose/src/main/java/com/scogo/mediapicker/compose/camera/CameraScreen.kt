@@ -1,7 +1,6 @@
 package com.scogo.mediapicker.compose.camera
 
 import android.media.MediaActionSound
-import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -46,22 +45,12 @@ internal fun CameraScreen(
     navigateToPreview: (MediaData) -> Unit,
 ) {
     val activity = composeActivity()
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
 
     CameraScreen(
         mediaViewModel = activityMediaViewModel(),
         sound = AppServiceLocator.mediaSound,
         outputDir = outputDir,
         executor = AppServiceLocator.executor,
-        onImageCaptured = {
-            scope.launch(Dispatchers.IO) {
-                FileUtil.saveImage(context,it)
-            }
-        },
-        onError = {
-
-        },
         navigateToPreview = navigateToPreview,
         onBackPress = {
             activity.finish()
@@ -76,12 +65,11 @@ private fun CameraScreen(
     sound: MediaActionSound,
     outputDir: File,
     executor: Executor,
-    onImageCaptured: (Uri) -> Unit,
-    onError: (Exception) -> Unit,
     navigateToPreview: (MediaData) -> Unit,
     onBackPress: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
@@ -111,6 +99,7 @@ private fun CameraScreen(
         sheetState = sheetState,
         sheetContent = {
             MediaScreen(
+                mediaList = mediaList,
                 navigateToPreview = navigateToPreview,
                 onBack = {
                     scope.launch {
@@ -137,8 +126,15 @@ private fun CameraScreen(
                         onMediaListItemClick = navigateToPreview,
                     )
                 },
-                onImageCaptured = onImageCaptured,
-                onError = onError
+                onImageCaptured = {
+                    scope.launch(Dispatchers.IO) {
+                        FileUtil.saveImage(context,it)
+                        mediaList.refresh()
+                    }
+                },
+                onError = {
+
+                }
             )
         }
     )
