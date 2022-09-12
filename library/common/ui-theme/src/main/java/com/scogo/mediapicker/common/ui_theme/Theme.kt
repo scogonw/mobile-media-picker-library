@@ -26,7 +26,7 @@ fun ScogoTheme(
 ) {
     val uiController = rememberSystemUiController()
     uiController.setStatusBarColor(
-        color = Color.Transparent
+        color = Color.Black
     )
 
     //we don't need dark theme

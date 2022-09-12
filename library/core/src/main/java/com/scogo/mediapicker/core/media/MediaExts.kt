@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.core.os.bundleOf
+import com.scogo.mediapicker.utils.convertTimeToStringDate
 
 private const val externalUri = "external"
 private val projections by lazy {
@@ -90,6 +91,7 @@ fun Context.fetchMedia(
                     mediaType = mediaType,
                     displayName = displayName,
                     dateTaken = dateTaken,
+                    date = convertTimeToStringDate(this,dateTaken),
                     caption = null,
                     bucketName = null,
                     selected = false

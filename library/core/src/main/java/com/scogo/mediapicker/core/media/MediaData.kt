@@ -8,6 +8,7 @@ data class MediaData(
     val mimeType: String?,
     val mediaType: Int?,
     val displayName: String?,
+    val date: String?,
     val dateTaken: Long?,
     val caption: String?,
     val bucketName: String?,
@@ -21,6 +22,7 @@ data class MediaData(
             mediaType = null,
             displayName = null,
             dateTaken = null,
+            date = null,
             caption = null,
             bucketName = null,
             selected = false
