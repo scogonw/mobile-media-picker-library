@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Videocam
+import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -83,7 +83,7 @@ fun MediaView(
                         .size(ButtonDimes.Five)
                         .align(Alignment.BottomStart)
                     ,
-                    imageVector = Icons.Default.Videocam,
+                    imageVector = Icons.Default.PlayCircle,
                     tint = Color.White,
                     contentDescription = null
                 )
