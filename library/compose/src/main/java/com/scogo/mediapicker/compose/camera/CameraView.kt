@@ -39,6 +39,7 @@ internal fun CameraView(
     executor: Executor,
     mediaActionSound: MediaActionSound,
     footerContent: @Composable () -> Unit,
+    bottomContent: @Composable () -> Unit = {},
     onImageCaptured: (Uri) -> Unit,
     onError: (Exception) -> Unit
 ){
@@ -173,6 +174,8 @@ internal fun CameraView(
                     }
                 )
             }
+
+            bottomContent()
         }
     }
 }

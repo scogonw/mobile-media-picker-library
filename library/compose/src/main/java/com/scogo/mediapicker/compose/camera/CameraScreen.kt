@@ -129,9 +129,12 @@ private fun CameraScreen(
                         },
                     )
                 },
+                bottomContent = {
+
+                },
                 onImageCaptured = {
                     scope.launch(Dispatchers.IO) {
-                        FileUtil.saveImage(context,it)
+                        FileUtil.saveImage(context, it)
                         mediaList.refresh()
                     }
                 },
