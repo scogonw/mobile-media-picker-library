@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.scogo.mediapicker.common.ui_theme.LightBlue
 
 @Composable
 fun CircleCheckbox(
@@ -22,7 +23,9 @@ fun CircleCheckbox(
     onCheckedChange: (Boolean) -> Unit = { }
 ) {
     val icon = if(checked) Icons.Filled.CheckCircle else Icons.Outlined.Circle
-    val tint = if(checked) Color.Blue else Color.White
+    val tint = if(checked) LightBlue else Color.White
+    val background = if(checked) Color.White else Color.Transparent
+
     IconButton(
         modifier = modifier.offset(x = 4.dp, y = 4.dp),
         enabled = enabled,
@@ -32,7 +35,7 @@ fun CircleCheckbox(
         content =  {
             Icon(
                 modifier = modifier.background(
-                    color = Color.Transparent,
+                    color = background,
                     shape = CircleShape
                 ),
                 tint = tint,
