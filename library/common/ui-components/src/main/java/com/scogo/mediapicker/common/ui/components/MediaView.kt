@@ -45,12 +45,6 @@ fun MediaView(
         Dimens.Zero
     }
 
-    val safeIconPadding = if (padding.value.value > 0) {
-        padding.value + Dimens.One
-    } else {
-        Dimens.Zero + Dimens.One
-    }
-
     val isVideo = media.mimeType?.contains(MimeTypes.VIDEO.name) ?: false
 
     Box(
@@ -85,7 +79,7 @@ fun MediaView(
             if(isVideo) {
                 Icon(
                     modifier = Modifier
-                        .padding(safeIconPadding)
+                        .padding(safePadding + Dimens.One)
                         .size(ButtonDimes.Five)
                         .align(Alignment.BottomStart)
                     ,
