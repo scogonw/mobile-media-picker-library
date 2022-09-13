@@ -12,7 +12,7 @@ data class MediaData(
     val dateTaken: Long?,
     val caption: String?,
     val bucketName: String?,
-    val selected: Boolean,
+    var selected: Boolean,
 ) {
     companion object {
         val EMPTY = MediaData(

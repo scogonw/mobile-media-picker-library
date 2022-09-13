@@ -22,7 +22,7 @@ fun CircleCheckbox(
     onCheckedChange: (Boolean) -> Unit = { }
 ) {
     val icon = if(checked) Icons.Filled.CheckCircle else Icons.Outlined.Circle
-    val color = if(checked) Color.White else Color.Transparent
+    val tint = if(checked) Color.Blue else Color.White
     IconButton(
         modifier = modifier.offset(x = 4.dp, y = 4.dp),
         enabled = enabled,
@@ -32,9 +32,10 @@ fun CircleCheckbox(
         content =  {
             Icon(
                 modifier = modifier.background(
-                    color = color,
+                    color = Color.Transparent,
                     shape = CircleShape
                 ),
+                tint = tint,
                 imageVector = icon,
                 contentDescription = null
             )

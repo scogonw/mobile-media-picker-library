@@ -2,7 +2,6 @@ package com.scogo.mediapicker.compose.media
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -20,8 +19,9 @@ import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.core.media.MediaData
 
 @Composable
-fun MediaScreen(
+internal fun MediaScreen(
     modifier: Modifier = Modifier,
+    mediaViewModel: MediaViewModel,
     mediaList: LazyPagingItems<MediaData>,
     navigateToPreview: (MediaData) -> Unit,
     onBack: () -> Unit,
@@ -55,8 +55,11 @@ fun MediaScreen(
                 val listState = rememberLazyListState()
                 MediaVerticalGridList(
                     state = listState,
+                    mediaViewModel = mediaViewModel,
                     lazyMediaList = mediaList,
-                    onItemClick = navigateToPreview
+                    onItemClick = {
+
+                    }
                 )
             }
         }
@@ -68,6 +71,7 @@ fun MediaScreen(
 internal fun MediaVerticalGridList(
     modifier: Modifier = Modifier,
     state: LazyListState,
+    mediaViewModel: MediaViewModel,
     lazyMediaList: LazyPagingItems<MediaData>,
     onItemClick: (MediaData) -> Unit,
 ) {
@@ -107,12 +111,14 @@ internal fun MediaVerticalGridList(
                                 MediaView(
                                     modifier = Modifier
                                         .height(Dimens.Twelve)
-                                        .padding(Dimens.OneHalf)
-                                        .clickable {
-                                            onItemClick(media)
-                                        }
-                                    ,
-                                    media = media
+                                        .padding(Dimens.OneHalf),
+                                    media = media.also { mMedia ->
+                                        mMedia.selected = mediaViewModel.isMediaSelected(mMedia.id)
+                                    },
+                                    onSelectMedia = { selectMedia ->
+                                        mediaViewModel.selectMedia(selectMedia)
+                                    },
+                                    onItemClick = onItemClick
                                 )
                             }
                         }
