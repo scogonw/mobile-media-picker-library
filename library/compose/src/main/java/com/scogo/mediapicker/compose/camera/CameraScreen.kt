@@ -123,9 +123,8 @@ private fun CameraScreen(
                 footerContent = {
                     CameraFooter(
                         lazyMediaList = mediaList,
-                        mediaViewModel = mediaViewModel,
                         onMediaListItemClick = {
-
+                            mediaViewModel.selectMedia(it)
                         },
                     )
                 },
@@ -149,7 +148,6 @@ private fun CameraScreen(
 @Composable
 internal fun CameraFooter(
     modifier: Modifier = Modifier,
-    mediaViewModel: MediaViewModel,
     lazyMediaList: LazyPagingItems<MediaData>,
     onMediaListItemClick: (MediaData) -> Unit,
 ) {
@@ -174,7 +172,6 @@ internal fun CameraFooter(
 
         MediaHorizontalList(
             state = listState,
-            mediaViewModel = mediaViewModel,
             lazyMediaList = lazyMediaList,
             onItemClick = onMediaListItemClick
         )
@@ -185,7 +182,6 @@ internal fun CameraFooter(
 internal fun MediaHorizontalList(
     modifier: Modifier = Modifier,
     state: LazyListState,
-    mediaViewModel: MediaViewModel,
     lazyMediaList: LazyPagingItems<MediaData>,
     onItemClick: (MediaData) -> Unit,
 ) {
@@ -204,12 +200,7 @@ internal fun MediaHorizontalList(
                     if (media.uri != null) {
                         MediaView(
                             modifier = Modifier.size(Dimens.Nine),
-                            media = media.also { mMedia ->
-                                mMedia.selected = mediaViewModel.isMediaSelected(mMedia.id)
-                            },
-                            onSelectMedia = { selectMedia ->
-                                mediaViewModel.selectMedia(selectMedia)
-                            },
+                            media = media,
                             onItemClick = onItemClick
                         )
                     }

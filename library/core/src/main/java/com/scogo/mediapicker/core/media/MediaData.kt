@@ -1,6 +1,7 @@
 package com.scogo.mediapicker.core.media
 
 import android.net.Uri
+import kotlinx.coroutines.flow.MutableStateFlow
 
 data class MediaData(
     val id: Long,
@@ -12,7 +13,7 @@ data class MediaData(
     val dateTaken: Long?,
     val caption: String?,
     val bucketName: String?,
-    var selected: Boolean,
+    var selected: MutableStateFlow<Boolean> = MutableStateFlow(false),
 ) {
     companion object {
         val EMPTY = MediaData(
@@ -24,8 +25,7 @@ data class MediaData(
             dateTaken = null,
             date = null,
             caption = null,
-            bucketName = null,
-            selected = false
+            bucketName = null
         )
     }
 }

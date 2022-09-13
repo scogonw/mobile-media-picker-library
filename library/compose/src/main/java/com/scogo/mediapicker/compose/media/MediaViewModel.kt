@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 internal class MediaViewModel(
     private val repo: MediaRepository,
@@ -39,25 +38,21 @@ internal class MediaViewModel(
         ).flow.cachedIn(viewModelScope)
     }
 
-    suspend fun selectMedia(
+    fun selectMedia(
         mediaData: MediaData
-    ): Boolean? = withContext(Dispatchers.IO){
-        val selected: Boolean?
+    ) {
         if (isMediaSelectionEnable(mediaData.id)) {
-            val media = selectedMedia.find { it.id == mediaData.id }
-            if(media == null) {
-                selected = true
-                mediaData.selected = selected
+            var selected = mediaData.selected.value
+            selected = !selected
+
+            if(selected && !selectedMedia.contains(mediaData)) {
                 selectedMedia.add(mediaData)
-            }else {
-                selected = false
+            } else if(selectedMedia.contains(mediaData)){
                 selectedMedia.remove(mediaData)
             }
+            mediaData.selected.value = selected
             _selectedMediaList.value = selectedMedia
-        }else {
-            selected = null
         }
-        selected
     }
 
     private fun isMediaSelectionEnable(
@@ -65,15 +60,7 @@ internal class MediaViewModel(
     ): Boolean  {
         return if(config.multipleAllowed) true
         else if(selectedMedia.isEmpty()) true
-        else selectedMedia.size == 1 && selectedMedia[0].id == id && selectedMedia[0].selected
-    }
-
-    fun isMediaSelected(id: Long, ): Boolean {
-        return if(selectedMedia.isNotEmpty()) {
-            selectedMedia.find { it.id == id }?.selected ?: false
-        }else {
-            false
-        }
+        else selectedMedia.size == 1 && selectedMedia[0].id == id
     }
 
     fun clearMediaSelection() {

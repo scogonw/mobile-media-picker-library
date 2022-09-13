@@ -55,10 +55,9 @@ internal fun MediaScreen(
                 val listState = rememberLazyListState()
                 MediaVerticalGridList(
                     state = listState,
-                    mediaViewModel = mediaViewModel,
                     lazyMediaList = mediaList,
                     onItemClick = {
-
+                        mediaViewModel.selectMedia(it)
                     }
                 )
             }
@@ -71,7 +70,6 @@ internal fun MediaScreen(
 internal fun MediaVerticalGridList(
     modifier: Modifier = Modifier,
     state: LazyListState,
-    mediaViewModel: MediaViewModel,
     lazyMediaList: LazyPagingItems<MediaData>,
     onItemClick: (MediaData) -> Unit,
 ) {
@@ -84,7 +82,7 @@ internal fun MediaVerticalGridList(
         state = state
     ) {
         list.forEach { (date, items) ->
-            if(!date.isNullOrEmpty()) {
+            if (!date.isNullOrEmpty()) {
                 stickyHeader {
                     Box(
                         modifier = Modifier
@@ -102,22 +100,17 @@ internal fun MediaVerticalGridList(
             }
 
             items(
-               items.chunked(rowSize),
+                items.chunked(rowSize),
             ) { row ->
                 Row(Modifier.fillParentMaxWidth()) {
                     for ((index, media) in row.withIndex()) {
                         Box(Modifier.fillMaxWidth(1f / (rowSize - index))) {
-                            if(media.uri != null) {
+                            if (media.uri != null) {
                                 MediaView(
                                     modifier = Modifier
                                         .height(Dimens.Twelve)
                                         .padding(Dimens.OneHalf),
-                                    media = media.also { mMedia ->
-                                        mMedia.selected = mediaViewModel.isMediaSelected(mMedia.id)
-                                    },
-                                    onSelectMedia = { selectMedia ->
-                                        mediaViewModel.selectMedia(selectMedia)
-                                    },
+                                    media = media,
                                     onItemClick = onItemClick
                                 )
                             }

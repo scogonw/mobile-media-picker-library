@@ -12,9 +12,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,17 +21,15 @@ import com.scogo.mediapicker.common.ui_theme.ButtonDimes
 import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.core.media.MediaData
 import com.scogo.mediapicker.core.media.MimeTypes
-import kotlinx.coroutines.launch
 
 @Composable
 fun MediaView(
     modifier: Modifier = Modifier,
     media: MediaData,
-    onSelectMedia: suspend (MediaData) -> Boolean? = { null },
     onItemClick: (MediaData) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
-    val selected = remember { mutableStateOf(media.selected) }
+    val selected = media.selected.collectAsState()
+
     val padding = animateDpAsState(
         targetValue = if (selected.value) Dimens.One else Dimens.Zero,
         animationSpec = spring(Spring.DampingRatioHighBouncy)
@@ -56,11 +52,6 @@ fun MediaView(
                     .padding(safePadding)
                     .clickable {
                         onItemClick(media)
-                        scope.launch {
-                            onSelectMedia(media)?.let {
-                                selected.value = it
-                            }
-                        }
                     },
                 factory = {
                     ImageView(it).apply {

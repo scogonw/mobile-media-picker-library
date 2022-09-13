@@ -10,6 +10,7 @@ import android.os.Build
 import android.provider.MediaStore
 import androidx.core.os.bundleOf
 import com.scogo.mediapicker.utils.convertTimeToStringDate
+import kotlinx.coroutines.flow.MutableStateFlow
 
 private const val externalUri = "external"
 private val projections by lazy {
@@ -94,7 +95,7 @@ fun Context.fetchMedia(
                     date = convertTimeToStringDate(this,dateTaken),
                     caption = null,
                     bucketName = null,
-                    selected = false
+                    selected = MutableStateFlow(false)
                 )
             )
         }
