@@ -8,12 +8,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.viewinterop.AndroidView
 import com.scogo.mediapicker.common.ui_theme.ButtonDimes
 import com.scogo.mediapicker.common.ui_theme.Dimens
@@ -35,6 +39,18 @@ fun MediaView(
         animationSpec = spring(Spring.DampingRatioHighBouncy)
     )
 
+    val safePadding = if (padding.value.value > 0) {
+        padding.value
+    } else {
+        Dimens.Zero
+    }
+
+    val safeIconPadding = if (padding.value.value > 0) {
+        padding.value + Dimens.One
+    } else {
+        Dimens.Zero + Dimens.One
+    }
+
     val isVideo = media.mimeType?.contains(MimeTypes.VIDEO.name) ?: false
 
     Box(
@@ -43,7 +59,7 @@ fun MediaView(
         content = {
             AndroidView(
                 modifier = modifier
-                    .padding(if(padding.value.value > 0) padding.value else Dimens.Zero)
+                    .padding(safePadding)
                     .clickable {
                         onItemClick(media)
                         scope.launch {
@@ -64,6 +80,18 @@ fun MediaView(
                     modifier = Modifier.size(ButtonDimes.Five),
                     checked = selected.value,
                     enabled = false,
+                )
+            }
+            if(isVideo) {
+                Icon(
+                    modifier = Modifier
+                        .padding(safeIconPadding)
+                        .size(ButtonDimes.Five)
+                        .align(Alignment.BottomStart)
+                    ,
+                    imageVector = Icons.Default.Videocam,
+                    tint = Color.White,
+                    contentDescription = null
                 )
             }
         }
