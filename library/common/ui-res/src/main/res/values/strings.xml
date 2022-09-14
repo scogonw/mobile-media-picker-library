@@ -3,4 +3,7 @@
     <string name="enable_permissions">Enable Required Permissions</string>
     <string name="grant_permissions">Grant Permissions</string>
     <string name="permissions_denied">Permissions Denied</string>
+
+    <string name="view_selected">View Selected</string>
+    <string name="add">Add</string>
 </resources>

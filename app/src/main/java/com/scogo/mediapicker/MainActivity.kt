@@ -32,17 +32,6 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     )
-                    MediaPicker.pick(
-                        activity = this,
-                        multiple = false,
-                        callback = object : MediaPickerCallback {
-                            override fun onPick(list: List<MediaData>) {
-                                runOnUiThread {
-                                    Log.e("MediaPicker","Second Picked media size ${list.size}")
-                                }
-                            }
-                        }
-                    )
                 },
                 content = {
                     Text(text = state.value)
