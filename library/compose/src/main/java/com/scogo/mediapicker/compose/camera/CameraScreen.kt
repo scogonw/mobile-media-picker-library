@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -159,9 +161,7 @@ internal fun CameraFooter(
     ) {
         Image(
             modifier = Modifier.size(Dimens.Three),
-            painter = painterResource(
-                id = R.drawable.arrow_down
-            ),
+            imageVector = Icons.Filled.ExpandLess,
             contentDescription = null,
             colorFilter = ColorFilter.tint(
                 color = Color.White
