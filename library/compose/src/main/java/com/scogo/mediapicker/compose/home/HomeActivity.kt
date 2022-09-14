@@ -14,6 +14,7 @@ import com.scogo.mediapicker.utils.Consts.WORK_ID
 import com.scogo.mediapicker.utils.getScogoMediaDirectory
 import com.scogo.mediapicker.utils.isPermissionsGranted
 
+
 internal class HomeActivity : ComponentActivity() {
 
     val mediaViewModel: MediaViewModel by viewModels {
