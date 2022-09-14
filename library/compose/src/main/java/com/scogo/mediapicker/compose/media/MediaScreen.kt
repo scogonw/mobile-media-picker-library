@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.paging.compose.LazyPagingItems
-import com.scogo.mediapicker.common.ui.components.MediaView
+import com.scogo.mediapicker.common.ui.components.media.MediaView
 import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.core.media.MediaData
 

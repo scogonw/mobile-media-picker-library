@@ -6,5 +6,8 @@
             android:name="com.scogo.mediapicker.compose.home.HomeActivity"
             android:exported="true"
             />
+        <activity android:name=".preview.MediaPreviewActivity"
+            android:enabled="true"
+            />
     </application>
 </manifest>

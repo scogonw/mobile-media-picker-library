@@ -15,5 +15,5 @@ dependencies {
     annotationProcessor(libs.android.glide.compiler)
     implementation(libs.android.paging)
     implementation(libs.android.paging.compose)
-
+    implementation(libs.android.exo.player)
 }

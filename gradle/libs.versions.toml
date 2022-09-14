@@ -26,6 +26,8 @@ android_paging_compose = "1.0.0-alpha16"
 android_activity_ktx = "1.5.1"
 apache_commons = "2.4"
 android_glide = "4.13.2"
+android_exo_player = "2.18.1"
+guava = "29.0-android"
 
 [libraries]
 gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
@@ -51,6 +53,7 @@ android_camerax_lifecycle = { module = "androidx.camera:camera-lifecycle", versi
 android_camerax_view = { module = "androidx.camera:camera-view", version.ref = "android_camerax" }
 android_accompanist_permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "android_accompanist" }
 android_accompanist_system_ui = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "android_accompanist" }
+android_accompanist_pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "android_accompanist" }
 android_hilt_gradle_plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "android_hilt" }
 android_hilt = { module = "com.google.dagger:hilt-android", version.ref = "android_hilt" }
 android_hilt_compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "android_hilt" }
@@ -60,11 +63,13 @@ android_activity_ktx = { module = "androidx.activity:activity-ktx", version.ref 
 apache_commons = { module = "org.apache.directory.studio:org.apache.commons.io", version.ref = "apache_commons" }
 android_glide = { module = "com.github.bumptech.glide:glide", version.ref = "android_glide" }
 android_glide_compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "android_glide" }
+android_exo_player = { module = "com.google.android.exoplayer:exoplayer", version.ref = "android_exo_player" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 
 [bundles]
 android_compose = ["android_compose_ui","android_compose_material", "android_compose_preview", "android_compose_activity", "android_compose_animation_graphics", "android_compose_navigation"]
 android_compose_debug = ["android_compose_tooling","android_compose_test_manifest","android_custom_view","android_custom_view_container"]
-android_camerax = ["android_camerax","android_camerax_lifecycle","android_camerax_view"]
+android_camerax = ["android_camerax","android_camerax_lifecycle","android_camerax_view","guava"]
 android_accompanist = ["android_accompanist_permissions","android_accompanist_system_ui"]
 android_ktx = ["android_activity_ktx"]
 

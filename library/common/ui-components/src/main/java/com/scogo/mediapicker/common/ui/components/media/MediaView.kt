@@ -1,6 +1,5 @@
-package com.scogo.mediapicker.common.ui.components
+package com.scogo.mediapicker.common.ui.components.media
 
-import android.widget.ImageView
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -16,7 +15,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.viewinterop.AndroidView
+import com.scogo.mediapicker.common.ui.components.custom.CircleCheckbox
+import com.scogo.mediapicker.common.ui.components.custom.CustomImageView
+import com.scogo.mediapicker.common.ui.components.util.load
 import com.scogo.mediapicker.common.ui_theme.ButtonDimes
 import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.core.media.MediaData
@@ -47,17 +48,14 @@ fun MediaView(
         modifier = modifier,
         contentAlignment = Alignment.TopStart,
         content = {
-            AndroidView(
+            CustomImageView(
                 modifier = modifier
                     .padding(safePadding)
                     .clickable {
                         onItemClick(media)
                     },
-                factory = {
-                    ImageView(it).apply {
-                        load(source = media.uri)
-                        maxSize()
-                    }
+                content = {
+                    it.load(source = media.uri)
                 }
             )
             if(selected.value) {

@@ -24,12 +24,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.scogo.mediapicker.common.ui.components.MediaView
+import com.scogo.mediapicker.common.ui.components.media.MediaView
 import com.scogo.mediapicker.common.ui_res.R
 import com.scogo.mediapicker.common.ui_theme.Dimens
-import com.scogo.mediapicker.compose.*
 import com.scogo.mediapicker.compose.media.MediaScreen
 import com.scogo.mediapicker.compose.media.MediaViewModel
+import com.scogo.mediapicker.compose.util.*
 import com.scogo.mediapicker.core.di.AppServiceLocator
 import com.scogo.mediapicker.core.media.MediaData
 import com.scogo.mediapicker.utils.FileUtil

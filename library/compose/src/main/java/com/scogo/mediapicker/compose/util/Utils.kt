@@ -1,10 +1,11 @@
-package com.scogo.mediapicker.compose
+package com.scogo.mediapicker.compose.util
 
 import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.scogo.mediapicker.compose.home.HomeActivity
 import com.scogo.mediapicker.compose.media.MediaViewModel
+import com.scogo.mediapicker.compose.preview.MediaPreviewActivity
 
 @Composable
 internal fun composeActivity(): Activity {
@@ -15,11 +16,7 @@ internal fun composeActivity(): Activity {
 @Composable
 internal fun activityMediaViewModel(): MediaViewModel {
     val context = LocalContext.current
-    return (context as HomeActivity).mediaViewModel
-}
-
-@Composable
-internal fun activitySharedViewModel(): SharedViewModel {
-    val context = LocalContext.current
-    return (context as HomeActivity).viewModel
+    val homeActivity = context as? HomeActivity
+    val previewActivity = context as? MediaPreviewActivity
+    return homeActivity?.mediaViewModel ?: previewActivity!!.mediaViewModel
 }

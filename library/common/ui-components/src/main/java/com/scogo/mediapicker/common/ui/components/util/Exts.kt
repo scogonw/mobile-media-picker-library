@@ -1,9 +1,10 @@
-package com.scogo.mediapicker.common.ui.components
+package com.scogo.mediapicker.common.ui.components.util
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
@@ -42,7 +43,7 @@ fun ImageView.load(
     return this
 }
 
-fun ImageView.maxSize(): ImageView {
+fun View.maxSize(): View {
     val params = LinearLayout.LayoutParams(
         LinearLayout.LayoutParams.MATCH_PARENT,
         LinearLayout.LayoutParams.MATCH_PARENT

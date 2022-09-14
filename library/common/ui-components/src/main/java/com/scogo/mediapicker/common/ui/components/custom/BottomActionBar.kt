@@ -1,4 +1,4 @@
-package com.scogo.mediapicker.common.ui.components
+package com.scogo.mediapicker.common.ui.components.custom
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

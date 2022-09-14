@@ -6,23 +6,41 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.scogo.mediapicker.compose.SharedDataHolder
 import com.scogo.mediapicker.core.data.api.MediaRepository
 import com.scogo.mediapicker.core.media.MediaData
 import com.scogo.mediapicker.core.media.MediaPickerConfiguration
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 internal class MediaViewModel(
     private val repo: MediaRepository,
     private val config: MediaPickerConfiguration,
 ): ViewModel() {
+    private val scope = CoroutineScope(Dispatchers.Main)
+
     private val _selectedMediaList = MutableStateFlow<List<MediaData>>(emptyList())
     val selectedMediaList: StateFlow<List<MediaData>> = _selectedMediaList
 
+    private val selectedMediaMutex = Mutex()
     private val selectedMedia: MutableList<MediaData> = mutableListOf()
+
+    fun changeSelectedMediaList(
+        list: List<MediaData>,
+    ){
+        scope.launch {
+            SharedDataHolder.changeSelectedMedia(list)
+            selectedMediaMutex.withLock {
+                _selectedMediaList.value = list.toMutableList()
+            }
+        }
+    }
 
     fun getMediaList(): Flow<PagingData<MediaData>> {
         return Pager(
@@ -51,7 +69,7 @@ internal class MediaViewModel(
                 selectedMedia.remove(mediaData)
             }
             mediaData.selected.value = selected
-            _selectedMediaList.value = selectedMedia
+            changeSelectedMediaList(selectedMedia)
         }
     }
 
@@ -66,7 +84,7 @@ internal class MediaViewModel(
     fun clearMediaSelection() {
         viewModelScope.launch(Dispatchers.IO) {
             selectedMedia.clear()
-            _selectedMediaList.value = selectedMedia
+            changeSelectedMediaList(emptyList())
         }
     }
 

@@ -15,4 +15,5 @@ dependencies {
     implementation(libs.android.paging)
     implementation(libs.android.paging.compose)
     implementation(libs.android.accompanist.permissions)
+    implementation(libs.android.accompanist.pager)
 }

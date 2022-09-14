@@ -1,5 +1,9 @@
 package com.scogo.mediapicker.core.media
 
 data class MediaPickerConfiguration(
-    val multipleAllowed: Boolean = true
-)
+    var multipleAllowed: Boolean = true
+){
+    companion object {
+        val EMPTY = MediaPickerConfiguration()
+    }
+}

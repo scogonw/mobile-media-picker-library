@@ -1,4 +1,4 @@
-package com.scogo.mediapicker.common.ui.components
+package com.scogo.mediapicker.common.ui.components.custom
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.offset

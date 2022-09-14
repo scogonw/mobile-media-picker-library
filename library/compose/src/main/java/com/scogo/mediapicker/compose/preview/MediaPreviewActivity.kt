@@ -1,6 +1,7 @@
-package com.scogo.mediapicker.compose.home
+package com.scogo.mediapicker.compose.preview
 
-import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,12 +10,16 @@ import com.scogo.mediapicker.common.ui_theme.ScogoTheme
 import com.scogo.mediapicker.compose.SharedDataHolder
 import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.compose.media.MediaViewModelFactory
-import com.scogo.mediapicker.compose.navigation.AppNavigationParams
 import com.scogo.mediapicker.core.data.impl.MediaRepositoryImpl
-import com.scogo.mediapicker.utils.getScogoMediaDirectory
-import com.scogo.mediapicker.utils.isPermissionsGranted
 
-internal class HomeActivity: ComponentActivity() {
+internal class MediaPreviewActivity: ComponentActivity() {
+
+    companion object {
+        fun start(from: Activity) {
+            val i = Intent(from, MediaPreviewActivity::class.java)
+            from.startActivity(i)
+        }
+    }
 
     val mediaViewModel: MediaViewModel by viewModels {
         MediaViewModelFactory(
@@ -23,27 +28,15 @@ internal class HomeActivity: ComponentActivity() {
         )
     }
 
-    private val permissions by lazy {
-        listOf(
-            Manifest.permission.CAMERA,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val appNavParams = AppNavigationParams(
-            permissions = permissions,
-            permissionsGranted = isPermissionsGranted(permissions),
-            scogoMediaDir = getScogoMediaDirectory()
+        mediaViewModel.changeSelectedMediaList(
+            list = SharedDataHolder.readSelectedMedia()
         )
         setContent {
             ScogoTheme {
-                HomeScreen(
-                    params = appNavParams
-                )
+                MediaPreviewScreen()
             }
         }
     }
-
 }

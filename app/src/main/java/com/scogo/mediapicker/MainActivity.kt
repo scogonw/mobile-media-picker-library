@@ -12,15 +12,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
-
-        val picker = MediaPicker.getInstance(
-            activity = this
-        )
-
         findViewById<ComposeView>(R.id.composeView).setContent {
             Button(
                 onClick = {
-                    picker.pick {
+                    MediaPicker.pick(
+                        activity = this,
+                        multiple = true
+                    ) {
 
                     }
                 },

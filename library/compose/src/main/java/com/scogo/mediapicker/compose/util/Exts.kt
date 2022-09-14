@@ -1,4 +1,4 @@
-package com.scogo.mediapicker.compose
+package com.scogo.mediapicker.compose.util
 
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.material.ExperimentalMaterialApi

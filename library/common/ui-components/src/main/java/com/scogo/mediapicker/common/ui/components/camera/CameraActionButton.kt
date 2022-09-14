@@ -1,4 +1,4 @@
-package com.scogo.mediapicker.common.ui.components
+package com.scogo.mediapicker.common.ui.components.camera
 
 import android.view.MotionEvent
 import androidx.compose.animation.core.animateFloatAsState
