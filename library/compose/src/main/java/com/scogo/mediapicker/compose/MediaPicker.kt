@@ -2,8 +2,8 @@ package com.scogo.mediapicker.compose
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import com.scogo.mediapicker.compose.home.HomeActivity
+import com.scogo.mediapicker.core.callback.MediaPickerCallback
 import com.scogo.mediapicker.core.media.MediaPickerConfiguration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,11 +16,13 @@ class MediaPicker private constructor(
 
     private fun initDataHolder(
         config: MediaPickerConfiguration,
+        callback: MediaPickerCallback
     ) {
         scope.launch {
             with(SharedDataHolder) {
                 clear()
                 changePickerConfig(config)
+                writeMediaCallback(callback)
             }
         }
     }
@@ -30,23 +32,22 @@ class MediaPicker private constructor(
         fun pick(
             activity: Activity,
             multiple: Boolean = false,
-            onImageSelected: (List<Uri>) -> Unit
+            callback: MediaPickerCallback,
         ) {
             val picker = MediaPicker(
                 mActivity = activity
             )
             with(picker) {
                 initDataHolder(
-                    config = MediaPickerConfiguration(
-                        multipleAllowed = multiple
-                    )
+                    config = MediaPickerConfiguration(multiple),
+                    callback = callback
                 )
                 val intent = Intent(
-                    mActivity, HomeActivity::class.java
+                    activity, HomeActivity::class.java
                 ).apply {
                     flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
                 }
-                mActivity.startActivity(intent)
+                activity.startActivity(intent)
             }
         }
     }

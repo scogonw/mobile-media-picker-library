@@ -1,5 +1,6 @@
 package com.scogo.mediapicker.compose
 
+import com.scogo.mediapicker.core.callback.MediaPickerCallback
 import com.scogo.mediapicker.core.media.MediaData
 import com.scogo.mediapicker.core.media.MediaPickerConfiguration
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,21 @@ object SharedDataHolder {
     private val selectedMediaLock = Mutex()
     private var selectedMediaList = listOf<MediaData>()
     private val selectedMedia = MutableStateFlow<List<MediaData>>(emptyList())
+
+    private val currentMediaCallbackLock = Mutex()
+    private var currentMediaCallback: MediaPickerCallback? = null
+
+    suspend fun writeMediaCallback(
+        callback: MediaPickerCallback
+    ){
+        currentMediaCallbackLock.withLock {
+            currentMediaCallback = callback
+        }
+    }
+
+    fun triggerMediaCallback() {
+        currentMediaCallback?.onPick(selectedMediaList)
+    }
 
     fun readSelectedMedia() = selectedMediaList
     fun readPickerConfig() = pickerConfig
