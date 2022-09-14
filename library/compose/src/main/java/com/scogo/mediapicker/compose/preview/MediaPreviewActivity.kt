@@ -7,32 +7,36 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.scogo.mediapicker.common.ui_theme.ScogoTheme
-import com.scogo.mediapicker.compose.SharedDataHolder
 import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.compose.media.MediaViewModelFactory
 import com.scogo.mediapicker.core.data.impl.MediaRepositoryImpl
+import com.scogo.mediapicker.utils.Consts.WORK_ID
 
 internal class MediaPreviewActivity: ComponentActivity() {
 
     companion object {
-        fun start(from: Activity) {
-            val i = Intent(from, MediaPreviewActivity::class.java)
-            from.startActivity(i)
+        fun start(from: Activity, workId: String) {
+            val intent = Intent(from, MediaPreviewActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                putExtra(WORK_ID,workId)
+            }
+            from.startActivity(intent)
         }
     }
 
     val mediaViewModel: MediaViewModel by viewModels {
-        MediaViewModelFactory(
-            repo = MediaRepositoryImpl(this),
-            config = SharedDataHolder.readPickerConfig()
-        )
+        MediaViewModelFactory(MediaRepositoryImpl(this))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mediaViewModel.changeSelectedMediaList(
-            list = SharedDataHolder.readSelectedMedia()
-        )
+        val workId = intent.extras?.getString(WORK_ID)
+        if(!mediaViewModel.initRequestData(workId)) {
+            finish()
+        }else {
+            mediaViewModel.syncSelectedMediaList()
+        }
+
         setContent {
             ScogoTheme {
                 MediaPreviewScreen()

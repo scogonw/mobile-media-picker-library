@@ -1,6 +1,7 @@
 package com.scogo.mediapicker
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -26,7 +27,18 @@ class MainActivity : AppCompatActivity() {
                         callback = object : MediaPickerCallback {
                             override fun onPick(list: List<MediaData>) {
                                 runOnUiThread {
-                                    state.value = list.size.toString()
+                                    Log.e("MediaPicker","First Picked media size ${list.size}")
+                                }
+                            }
+                        }
+                    )
+                    MediaPicker.pick(
+                        activity = this,
+                        multiple = false,
+                        callback = object : MediaPickerCallback {
+                            override fun onPick(list: List<MediaData>) {
+                                runOnUiThread {
+                                    Log.e("MediaPicker","Second Picked media size ${list.size}")
                                 }
                             }
                         }

@@ -5,28 +5,10 @@ import android.content.Intent
 import com.scogo.mediapicker.compose.home.HomeActivity
 import com.scogo.mediapicker.core.callback.MediaPickerCallback
 import com.scogo.mediapicker.core.media.MediaPickerConfiguration
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.scogo.mediapicker.core.request.PickerRequestWorker
+import com.scogo.mediapicker.utils.Consts.WORK_ID
 
-class MediaPicker private constructor(
-    private var mActivity: Activity
-) {
-    private val scope = CoroutineScope(Dispatchers.Main)
-
-    private fun initDataHolder(
-        config: MediaPickerConfiguration,
-        callback: MediaPickerCallback
-    ) {
-        scope.launch {
-            with(SharedDataHolder) {
-                clear()
-                changePickerConfig(config)
-                writeMediaCallback(callback)
-            }
-        }
-    }
-
+class MediaPicker private constructor() {
     companion object {
         @Throws
         fun pick(
@@ -34,21 +16,15 @@ class MediaPicker private constructor(
             multiple: Boolean = false,
             callback: MediaPickerCallback,
         ) {
-            val picker = MediaPicker(
-                mActivity = activity
+            val worker = PickerRequestWorker.getInstance()
+            val request = worker.enqueue(
+                config = MediaPickerConfiguration(multiple),
+                callback = callback
             )
-            with(picker) {
-                initDataHolder(
-                    config = MediaPickerConfiguration(multiple),
-                    callback = callback
-                )
-                val intent = Intent(
-                    activity, HomeActivity::class.java
-                ).apply {
-                    flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-                }
-                activity.startActivity(intent)
-            }
+            val intent = Intent(activity, HomeActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            intent.putExtra(WORK_ID,request)
+            activity.startActivity(intent)
         }
     }
 }

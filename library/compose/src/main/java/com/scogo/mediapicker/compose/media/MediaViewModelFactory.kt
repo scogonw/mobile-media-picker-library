@@ -3,16 +3,14 @@ package com.scogo.mediapicker.compose.media
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.scogo.mediapicker.core.data.api.MediaRepository
-import com.scogo.mediapicker.core.media.MediaPickerConfiguration
 
 @Suppress("UNCHECKED_CAST")
 internal class MediaViewModelFactory(
-    private val repo: MediaRepository,
-    private val config: MediaPickerConfiguration
+    private val repo: MediaRepository
 ): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if(modelClass.isAssignableFrom(MediaViewModel::class.java)) {
-            MediaViewModel(repo, config) as T
+            MediaViewModel(repo) as T
         }else {
             throw IllegalArgumentException("")
         }
