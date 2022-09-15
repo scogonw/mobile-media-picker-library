@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.scogo.mediapicker.compose.camera.CameraScreen
 import com.scogo.mediapicker.compose.permission.PermissionsScreen
+import com.scogo.mediapicker.compose.preview.MediaPreviewActivity
 import java.io.File
 
 internal sealed class Screen(val route: String) {
@@ -94,8 +95,8 @@ private fun NavGraphBuilder.addCameraScreen(
         content = {
             CameraScreen(
                 outputDir = outputDir,
-                navigateToPreview = {
-
+                navigateToPreview = { workId, activity ->
+                    MediaPreviewActivity.start(activity, workId)
                 }
             )
         }

@@ -30,12 +30,10 @@ internal class MediaPreviewActivity: ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val workId = intent.extras?.getString(WORK_ID)
-        if(!mediaViewModel.initRequestData(workId)) {
-            finish()
-        }else {
-            mediaViewModel.syncSelectedMediaList()
-        }
+        if(!mediaViewModel.initRequestData(workId)) finish()
+        else mediaViewModel.syncSelectedMediaList()
 
         setContent {
             ScogoTheme {

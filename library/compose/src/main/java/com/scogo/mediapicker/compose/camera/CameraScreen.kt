@@ -1,5 +1,6 @@
 package com.scogo.mediapicker.compose.camera
 
+import android.app.Activity
 import android.media.MediaActionSound
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -47,16 +48,22 @@ import java.util.concurrent.Executor
 @Composable
 internal fun CameraScreen(
     outputDir: File,
-    navigateToPreview: (MediaData) -> Unit,
+    navigateToPreview: (workId: String, activity: Activity) -> Unit,
 ) {
     val activity = composeActivity()
+    val mediaViewModel = activityMediaViewModel()
 
     CameraScreen(
-        mediaViewModel = activityMediaViewModel(),
+        mediaViewModel = mediaViewModel,
         sound = AppServiceLocator.mediaSound,
         outputDir = outputDir,
         executor = AppServiceLocator.executor,
-        navigateToPreview = navigateToPreview,
+        navigateToPreview = {
+            navigateToPreview(
+                mediaViewModel.readRequestData().readId(),
+                activity
+            )
+        },
         onBackPress = {
             activity.finish()
         }
@@ -70,7 +77,7 @@ private fun CameraScreen(
     sound: MediaActionSound,
     outputDir: File,
     executor: Executor,
-    navigateToPreview: (MediaData) -> Unit,
+    navigateToPreview: () -> Unit,
     onBackPress: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -147,9 +154,7 @@ private fun CameraScreen(
                             header = stringResource(R.string.view_selected),
                             icon = Icons.Default.Image,
                             actionName = stringResource(R.string.add_with_count, selectedMedia.value.size),
-                            onActionClick = {
-
-                            }
+                            onActionClick = navigateToPreview
                         )
                     }
                 },

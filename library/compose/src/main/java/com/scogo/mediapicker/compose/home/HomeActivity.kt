@@ -28,9 +28,7 @@ internal class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val workId = intent.extras?.getString(WORK_ID)
-        if(!mediaViewModel.initRequestData(workId)) {
-            finish()
-        }
+        if(!mediaViewModel.initRequestData(workId)) finish()
 
         val appNavParams = AppNavigationParams(
             permissions = permissions,

@@ -33,7 +33,7 @@ internal fun MediaScreen(
     modifier: Modifier = Modifier,
     mediaViewModel: MediaViewModel,
     mediaList: LazyPagingItems<MediaData>,
-    navigateToPreview: (MediaData) -> Unit,
+    navigateToPreview: () -> Unit,
     onBack: () -> Unit,
 ) {
     val scaffoldState = rememberScaffoldState()
@@ -71,9 +71,7 @@ internal fun MediaScreen(
                     header = stringResource(R.string.view_selected),
                     icon = Icons.Default.Image,
                     actionName = stringResource(R.string.add_with_count, selectedMedia.value.size),
-                    onActionClick = {
-
-                    }
+                    onActionClick = navigateToPreview
                 )
             }
         },
