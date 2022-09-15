@@ -1,8 +1,8 @@
 package com.scogo.mediapicker.compose.media
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.*
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -64,7 +64,8 @@ internal fun MediaScreen(
             visible.value = selectedMedia.value.isNotEmpty()
             AnimatedVisibility(
                 visible = visible.value,
-                enter = slideInVertically() + fadeIn()
+                enter = slideInVertically() + fadeIn(),
+                exit = shrinkOut(spring(Spring.DampingRatioHighBouncy)) + fadeOut(),
             ) {
                 BottomActionBar(
                     modifier = Modifier.fillMaxWidth(),

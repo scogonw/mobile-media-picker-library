@@ -3,11 +3,9 @@ package com.scogo.mediapicker.compose.camera
 import android.app.Activity
 import android.media.MediaActionSound
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.*
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
@@ -147,7 +145,8 @@ private fun CameraScreen(
                     visible.value = selectedMedia.value.isNotEmpty()
                     AnimatedVisibility(
                         visible = visible.value,
-                        enter = slideInVertically() + fadeIn()
+                        enter = slideInVertically() + fadeIn(),
+                        exit = shrinkOut(spring(Spring.DampingRatioHighBouncy)) + fadeOut(),
                     ) {
                         BottomActionBar(
                             modifier = Modifier.fillMaxWidth(),
