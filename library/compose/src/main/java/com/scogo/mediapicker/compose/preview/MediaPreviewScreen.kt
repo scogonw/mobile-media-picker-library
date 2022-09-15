@@ -20,20 +20,18 @@ import com.scogo.mediapicker.common.ui.components.media.MediaPreviewListView
 import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.compose.util.activityMediaViewModel
-import com.scogo.mediapicker.compose.util.composeActivity
 import com.scogo.mediapicker.core.media.MediaData
 
 @Composable
-internal fun MediaPreviewScreen() {
-    val activity = composeActivity()
+internal fun MediaPreviewScreen(
+    onBack: () -> Unit
+) {
     val mediaViewModel = activityMediaViewModel()
 
     MediaPreviewView(
         modifier = Modifier,
         mediaViewModel = mediaViewModel,
-        onBack = {
-            activity.finish()
-        }
+        onBack = onBack
     )
 }
 

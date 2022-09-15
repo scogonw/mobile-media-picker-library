@@ -37,7 +37,11 @@ internal class MediaPreviewActivity: ComponentActivity() {
 
         setContent {
             ScogoTheme {
-                MediaPreviewScreen()
+                MediaPreviewScreen(
+                    onBack = {
+                        finish()
+                    }
+                )
             }
         }
     }
