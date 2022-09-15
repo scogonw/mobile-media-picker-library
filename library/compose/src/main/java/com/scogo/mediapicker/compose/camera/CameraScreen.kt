@@ -136,7 +136,9 @@ private fun CameraScreen(
                     CameraFooter(
                         lazyMediaList = mediaList,
                         onMediaListItemClick = {
-                            mediaViewModel.selectMedia(it)
+                            scope.launch {
+                                mediaViewModel.selectMedia(it)
+                            }
                         },
                     )
                 },
@@ -159,8 +161,11 @@ private fun CameraScreen(
                 },
                 onImageCaptured = {
                     scope.launch(Dispatchers.IO) {
-                        FileUtil.saveImage(context, it)
-                        mediaList.refresh()
+                        FileUtil.saveImage(context, it)?.let {
+                            mediaViewModel.writeToCapturedMedia(listOf(it))
+                            mediaList.refresh()
+                            navigateToPreview()
+                        }
                     }
                 },
                 onError = {

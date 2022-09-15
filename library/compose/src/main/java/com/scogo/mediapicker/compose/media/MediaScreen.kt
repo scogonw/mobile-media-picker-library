@@ -14,10 +14,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Image
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -27,6 +24,7 @@ import com.scogo.mediapicker.common.ui.components.media.MediaView
 import com.scogo.mediapicker.common.ui_res.R
 import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.core.media.MediaData
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun MediaScreen(
@@ -37,6 +35,7 @@ internal fun MediaScreen(
     onBack: () -> Unit,
 ) {
     val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
     val selectedMedia = mediaViewModel.selectedMediaList.collectAsState()
 
     Scaffold(
@@ -85,7 +84,9 @@ internal fun MediaScreen(
                     state = listState,
                     lazyMediaList = mediaList,
                     onItemClick = {
-                        mediaViewModel.selectMedia(it)
+                        scope.launch {
+                            mediaViewModel.selectMedia(it)
+                        }
                     }
                 )
             }

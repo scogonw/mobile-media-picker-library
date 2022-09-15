@@ -174,10 +174,12 @@ object FileUtil {
     fun saveImage(
         context: Context?,
         uri: Uri?,
-    ) {
-        if(uri == null || context == null) return
+    ): Uri? {
+        if(uri == null || context == null) return null
+        var mediaUri: Uri? = null
         try {
             val actualUri = saveFileFromUri(context,uri) ?: Uri.EMPTY
+            mediaUri = actualUri
             val bitmap = getBitmap(context, actualUri)
             val mimeType = getMimeType(actualUri,context)
             val fos: OutputStream? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -207,6 +209,7 @@ object FileUtil {
         } catch(e: Error) {
             e.printStackTrace()
         }
+        return mediaUri
     }
     private fun getBitmap(context: Context, uri: Uri): Bitmap? {
         val inputStream: InputStream? = context.contentResolver.openInputStream(uri)

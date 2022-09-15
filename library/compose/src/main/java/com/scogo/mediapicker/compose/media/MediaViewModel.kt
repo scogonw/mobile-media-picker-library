@@ -1,5 +1,6 @@
 package com.scogo.mediapicker.compose.media
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -10,8 +11,6 @@ import com.scogo.mediapicker.core.data.api.MediaRepository
 import com.scogo.mediapicker.core.media.MediaData
 import com.scogo.mediapicker.core.request.PickerRequestData
 import com.scogo.mediapicker.core.request.PickerRequestWorker
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,11 +21,11 @@ import kotlinx.coroutines.sync.withLock
 internal class MediaViewModel(
     private val repo: MediaRepository
 ): ViewModel() {
-    private val scope = CoroutineScope(Dispatchers.Main)
-
     private val worker = PickerRequestWorker.getInstance()
     private lateinit var requestData: PickerRequestData
+
     fun readRequestData() = requestData
+    fun readCapturedMedia() = requestData.readCapturedMedia()
 
     private val _selectedMediaList = MutableStateFlow<List<MediaData>>(emptyList())
     val selectedMediaList: StateFlow<List<MediaData>> = _selectedMediaList
@@ -44,19 +43,6 @@ internal class MediaViewModel(
         }
     }
 
-    fun syncSelectedMediaList() {
-        changeSelectedMediaList(requestData.readSelectedMedia())
-    }
-
-    private fun changeSelectedMediaList(list: List<MediaData>){
-        scope.launch {
-            requestData.changeSelectedMedia(list)
-            selectedMediaMutex.withLock {
-                _selectedMediaList.value = list.toMutableList()
-            }
-        }
-    }
-
     fun getMediaList(): Flow<PagingData<MediaData>> {
         return Pager(
             config = PagingConfig(
@@ -71,7 +57,7 @@ internal class MediaViewModel(
         ).flow.cachedIn(viewModelScope)
     }
 
-    fun selectMedia(mediaData: MediaData) {
+    suspend fun selectMedia(mediaData: MediaData) {
         if (isMediaSelectionEnable(mediaData.id)) {
             var selected = mediaData.selected.value
             selected = !selected
@@ -92,11 +78,30 @@ internal class MediaViewModel(
         else selectedMedia.size == 1 && selectedMedia[0].id == id
     }
 
-    fun clearMediaSelection() {
-        viewModelScope.launch(Dispatchers.IO) {
-            selectedMedia.clear()
-            changeSelectedMediaList(emptyList())
+    fun syncSelectedMediaList() {
+        viewModelScope.launch {
+            changeSelectedMediaList(requestData.readSelectedMedia())
         }
+    }
+
+    private suspend fun changeSelectedMediaList(list: List<MediaData>){
+        requestData.changeSelectedMedia(list)
+        selectedMediaMutex.withLock {
+            _selectedMediaList.value = list.toMutableList()
+        }
+    }
+
+    suspend fun writeToCapturedMedia(list: List<Uri>) {
+        requestData.changeCapturedMedia(list)
+    }
+
+    suspend fun clearCapturedMedia() {
+        writeToCapturedMedia(emptyList())
+    }
+
+    suspend fun clearMediaSelection() {
+        selectedMedia.clear()
+        changeSelectedMediaList(emptyList())
     }
 
 

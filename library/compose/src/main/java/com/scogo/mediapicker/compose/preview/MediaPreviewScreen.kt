@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,17 +22,24 @@ import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.compose.util.activityMediaViewModel
 import com.scogo.mediapicker.core.media.MediaData
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun MediaPreviewScreen(
     onBack: () -> Unit
 ) {
+    val scope = rememberCoroutineScope()
     val mediaViewModel = activityMediaViewModel()
 
     MediaPreviewView(
         modifier = Modifier,
         mediaViewModel = mediaViewModel,
-        onBack = onBack
+        onBack = {
+            scope.launch {
+                mediaViewModel.clearCapturedMedia()
+                onBack()
+            }
+        }
     )
 }
 
@@ -46,6 +54,7 @@ private fun MediaPreviewView(
     val pagerState = rememberPagerState()
 
     val selectedImages = mediaViewModel.selectedMediaList.collectAsState()
+    val capturedImages = mediaViewModel.readCapturedMedia()
 
     BackHandler(onBack = onBack)
 
@@ -92,7 +101,9 @@ private fun MediaPreviewView(
                                     .height(this@BoxWithConstraints.maxHeight / 2)
                                 ,
                                 state = pagerState,
-                                mediaList = selectedImages.value
+                                mediaList = capturedImages.ifEmpty {
+                                    selectedImages.value
+                                }
                             )
                         }
                     )

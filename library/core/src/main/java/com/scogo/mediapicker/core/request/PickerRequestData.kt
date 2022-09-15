@@ -1,5 +1,6 @@
 package com.scogo.mediapicker.core.request
 
+import android.net.Uri
 import com.scogo.mediapicker.core.callback.MediaPickerCallback
 import com.scogo.mediapicker.core.media.MediaData
 import com.scogo.mediapicker.core.media.MediaPickerConfiguration
@@ -25,18 +26,31 @@ class PickerRequestData private constructor(
         }
     }
 
+    fun mediaPicked() = callback.onPick(selectedMediaList)
+
     private val selectedMediaLock = Mutex()
     private var selectedMediaList = listOf<MediaData>()
 
-    fun mediaPicked() = callback.onPick(selectedMediaList)
+    private val capturedMediaLock = Mutex()
+    private var capturedMedia: List<MediaData> = mutableListOf()
 
     fun readId() = id
     fun readPickerConfig() = config
     fun readSelectedMedia() = selectedMediaList
+    fun readCapturedMedia() = capturedMedia
 
     suspend fun changeSelectedMedia(list: List<MediaData>) {
         selectedMediaLock.withLock {
             selectedMediaList = list
         }
     }
+
+    suspend fun changeCapturedMedia(list: List<Uri>) {
+        capturedMediaLock.withLock {
+            capturedMedia = list.map {
+                MediaData.create(it)
+            }
+        }
+    }
+
 }
