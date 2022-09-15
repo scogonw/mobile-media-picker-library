@@ -2,8 +2,11 @@ package com.scogo.mediapicker.compose.camera
 
 import android.media.MediaActionSound
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
@@ -12,18 +15,21 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.scogo.mediapicker.common.ui.components.custom.BottomActionBar
 import com.scogo.mediapicker.common.ui.components.media.MediaView
 import com.scogo.mediapicker.common.ui_res.R
 import com.scogo.mediapicker.common.ui_theme.Dimens
@@ -70,6 +76,9 @@ private fun CameraScreen(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
+    val mediaList = mediaViewModel.getMediaList().collectAsLazyPagingItems()
+    val selectedMedia = mediaViewModel.selectedMediaList.collectAsState()
+
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
         skipHalfExpanded = true,
@@ -90,8 +99,6 @@ private fun CameraScreen(
             }
         }
     }
-
-    val mediaList = mediaViewModel.getMediaList().collectAsLazyPagingItems()
 
     ModalBottomSheetLayout(
         modifier = Modifier.fillMaxSize(),
@@ -129,7 +136,22 @@ private fun CameraScreen(
                     )
                 },
                 bottomContent = {
+                    val visible = remember { mutableStateOf(false) }
+                    visible.value = selectedMedia.value.isNotEmpty()
+                    AnimatedVisibility(
+                        visible = visible.value,
+                        enter = slideInVertically() + fadeIn()
+                    ) {
+                        BottomActionBar(
+                            modifier = Modifier.fillMaxWidth(),
+                            header = stringResource(R.string.view_selected),
+                            icon = Icons.Default.Image,
+                            actionName = stringResource(R.string.add_with_count, selectedMedia.value.size),
+                            onActionClick = {
 
+                            }
+                        )
+                    }
                 },
                 onImageCaptured = {
                     scope.launch(Dispatchers.IO) {

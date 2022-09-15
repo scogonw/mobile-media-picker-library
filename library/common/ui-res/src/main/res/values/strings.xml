@@ -5,5 +5,5 @@
     <string name="permissions_denied">Permissions Denied</string>
 
     <string name="view_selected">View Selected</string>
-    <string name="add">Add</string>
+    <string name="add_with_count">Add (%1$s)</string>
 </resources>
