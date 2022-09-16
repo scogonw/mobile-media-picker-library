@@ -33,7 +33,6 @@ import com.scogo.mediapicker.common.ui.components.camera.CameraActionIcon
 import com.scogo.mediapicker.common.ui.components.custom.Chip
 import com.scogo.mediapicker.common.ui_theme.ButtonDimes
 import com.scogo.mediapicker.common.ui_theme.Dimens
-import com.scogo.mediapicker.compose.util.ComposeTimer
 import com.scogo.mediapicker.core.media.MimeTypes
 import java.io.File
 import java.util.*
@@ -54,15 +53,15 @@ internal fun CameraView(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val timer = ComposeTimer.get()
-    val timerState = timer.readTime().collectAsState()
-    val isRecording = remember { mutableStateOf(false) }
+    val holder = CameraStateHolder
+    val timerState = holder.timer.readTime().collectAsState()
+    val isRecording = rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(isRecording) {
         if(isRecording.value) {
-            timer.start()
+            holder.timer.start()
         }else {
-            timer.stop()
+            holder.timer.stop()
         }
     }
 
@@ -112,8 +111,6 @@ internal fun CameraView(
         .prepareRecording(context,mediaStoreOutputOptions)
         .withAudioEnabled()
 
-    var recordingSession: Recording? = null
-
     val videoRecordingListener = Consumer<VideoRecordEvent> { event ->
         when(event) {
             is VideoRecordEvent.Start -> {
@@ -125,8 +122,8 @@ internal fun CameraView(
                     val uri = event.outputResults.outputUri
                     onMediaCaptured(uri)
                 }else {
-                    recordingSession?.close()
-                    recordingSession = null
+                    holder.recordingSession?.close()
+                    holder.recordingSession = null
                 }
             }
         }
@@ -217,11 +214,11 @@ internal fun CameraView(
                         )
                     },
                     onHold = { released ->
-                        recordingSession = if (!released && recordingSession == null) {
+                        holder.recordingSession = if (!released && holder.recordingSession == null) {
                             recording.start(executor, videoRecordingListener)
                         } else {
                             isRecording.value = false
-                            recordingSession?.stop()
+                            holder.recordingSession?.stop()
                             null
                         }
                     },

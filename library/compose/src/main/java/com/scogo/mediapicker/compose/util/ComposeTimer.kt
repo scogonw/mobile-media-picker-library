@@ -21,7 +21,6 @@ internal class ComposeTimer {
     }
 
     fun start() {
-        stop()
         timerTask = object: TimerTask() {
             override fun run() {
                 timerTime++
