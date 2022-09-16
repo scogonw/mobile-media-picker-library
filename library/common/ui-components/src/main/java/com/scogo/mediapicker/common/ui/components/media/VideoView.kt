@@ -25,7 +25,7 @@ fun VideoView(
                 .build()
 
             it.setMediaItem(mediaItem)
-            it.playWhenReady = true
+            it.playWhenReady = false
             it.prepare()
         }
     }
