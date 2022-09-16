@@ -162,7 +162,11 @@ private fun CameraScreen(
                 onMediaCaptured = { uri ->
                     scope.launch(Dispatchers.IO) {
                         FileUtil.saveImageIfNotVideo(context,uri)?.let {
-                            mediaViewModel.writeToCapturedMedia(listOf(it))
+                            val media = MediaData.create(
+                                uri = it,
+                                mime = FileUtil.getMimeType(it,context)
+                            )
+                            mediaViewModel.writeToCapturedMedia(listOf(media))
                             mediaList.refresh()
                             navigateToPreview()
                         }

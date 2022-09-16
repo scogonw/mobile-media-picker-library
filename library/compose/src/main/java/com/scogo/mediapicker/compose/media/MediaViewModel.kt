@@ -1,6 +1,5 @@
 package com.scogo.mediapicker.compose.media
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -91,7 +90,7 @@ internal class MediaViewModel(
         }
     }
 
-    suspend fun writeToCapturedMedia(list: List<Uri>) {
+    suspend fun writeToCapturedMedia(list: List<MediaData>) {
         requestData.changeCapturedMedia(list)
     }
 

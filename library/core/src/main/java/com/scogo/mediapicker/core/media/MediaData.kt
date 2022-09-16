@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 data class MediaData(
     val id: Long,
     var uri: Uri?,
-    val mimeType: String?,
+    var mimeType: String?,
     val mediaType: Int?,
     val displayName: String?,
     val date: String?,
@@ -27,9 +27,10 @@ data class MediaData(
             caption = null,
             bucketName = null
         )
-        fun create(uri: Uri?): MediaData {
+        fun create(uri: Uri?, mime: String?): MediaData {
             return EMPTY.also {
                 it.uri = uri
+                it.mimeType = mime
             }
         }
     }
