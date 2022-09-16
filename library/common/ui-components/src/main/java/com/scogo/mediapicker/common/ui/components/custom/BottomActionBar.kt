@@ -1,31 +1,31 @@
 package com.scogo.mediapicker.common.ui.components.custom
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.common.ui_theme.LightGrey
 
 @Composable
 fun BottomActionBar(
     modifier: Modifier,
-    @StringRes title: Int,
+    header: String,
+    actionName: String,
     icon: ImageVector,
-    @StringRes actionName: Int,
     onActionClick: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
             .background(color = LightGrey)
             .padding(horizontal = Dimens.Three, vertical = Dimens.One)
         ,
@@ -43,16 +43,27 @@ fun BottomActionBar(
                 Spacer(modifier = Modifier.width(Dimens.One))
                 Text(
                     modifier = Modifier,
-                    text = stringResource(id = title),
+                    text =header ,
                     style = MaterialTheme.typography.caption,
                     fontWeight = FontWeight.Bold
                 )
             }
             RoundedButton(
                 modifier = Modifier,
-                actionName = actionName,
+                text = actionName,
                 onActionClick = onActionClick,
             )
         }
+    )
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    BottomActionBar(
+        modifier = Modifier.fillMaxWidth(),
+        header = "View",
+        actionName = "Add",
+        icon = Icons.Default.Image
     )
 }

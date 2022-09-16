@@ -22,15 +22,17 @@ internal class HomeActivity : ComponentActivity() {
     }
 
     private val permissions by lazy {
-        listOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
+        listOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val workId = intent.extras?.getString(WORK_ID)
-        if(!mediaViewModel.initRequestData(workId)) {
-            finish()
-        }
+        if(!mediaViewModel.initRequestData(workId)) finish()
 
         val appNavParams = AppNavigationParams(
             permissions = permissions,

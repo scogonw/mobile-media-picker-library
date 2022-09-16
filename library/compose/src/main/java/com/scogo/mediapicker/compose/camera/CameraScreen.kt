@@ -1,7 +1,9 @@
 package com.scogo.mediapicker.compose.camera
 
+import android.app.Activity
 import android.media.MediaActionSound
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.*
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
@@ -13,19 +15,20 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.scogo.mediapicker.common.ui.components.custom.BottomActionBar
 import com.scogo.mediapicker.common.ui.components.media.MediaView
 import com.scogo.mediapicker.common.ui_res.R
 import com.scogo.mediapicker.common.ui_theme.Dimens
@@ -43,16 +46,22 @@ import java.util.concurrent.Executor
 @Composable
 internal fun CameraScreen(
     outputDir: File,
-    navigateToPreview: (MediaData) -> Unit,
+    navigateToPreview: (workId: String, activity: Activity) -> Unit,
 ) {
     val activity = composeActivity()
+    val mediaViewModel = activityMediaViewModel()
 
     CameraScreen(
-        mediaViewModel = activityMediaViewModel(),
+        mediaViewModel = mediaViewModel,
         sound = AppServiceLocator.mediaSound,
         outputDir = outputDir,
         executor = AppServiceLocator.executor,
-        navigateToPreview = navigateToPreview,
+        navigateToPreview = {
+            navigateToPreview(
+                mediaViewModel.readRequestData().readId(),
+                activity
+            )
+        },
         onBackPress = {
             activity.finish()
         }
@@ -66,11 +75,14 @@ private fun CameraScreen(
     sound: MediaActionSound,
     outputDir: File,
     executor: Executor,
-    navigateToPreview: (MediaData) -> Unit,
+    navigateToPreview: () -> Unit,
     onBackPress: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+
+    val mediaList = mediaViewModel.getMediaList().collectAsLazyPagingItems()
+    val selectedMedia = mediaViewModel.selectedMediaList.collectAsState()
 
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
@@ -92,8 +104,6 @@ private fun CameraScreen(
             }
         }
     }
-
-    val mediaList = mediaViewModel.getMediaList().collectAsLazyPagingItems()
 
     ModalBottomSheetLayout(
         modifier = Modifier.fillMaxSize(),
@@ -126,17 +136,36 @@ private fun CameraScreen(
                     CameraFooter(
                         lazyMediaList = mediaList,
                         onMediaListItemClick = {
-                            mediaViewModel.selectMedia(it)
+                            scope.launch {
+                                mediaViewModel.selectMedia(it)
+                            }
                         },
                     )
                 },
                 bottomContent = {
-
+                    val visible = remember { mutableStateOf(false) }
+                    visible.value = selectedMedia.value.isNotEmpty()
+                    AnimatedVisibility(
+                        visible = visible.value,
+                        enter = slideInVertically() + fadeIn(),
+                        exit = shrinkOut(spring(Spring.DampingRatioHighBouncy)) + fadeOut(),
+                    ) {
+                        BottomActionBar(
+                            modifier = Modifier.fillMaxWidth(),
+                            header = stringResource(R.string.view_selected),
+                            icon = Icons.Default.Image,
+                            actionName = stringResource(R.string.add_with_count, selectedMedia.value.size),
+                            onActionClick = navigateToPreview
+                        )
+                    }
                 },
-                onImageCaptured = {
+                onMediaCaptured = { uri ->
                     scope.launch(Dispatchers.IO) {
-                        FileUtil.saveImage(context, it)
-                        mediaList.refresh()
+                        FileUtil.saveImageIfNotVideo(context,uri)?.let {
+                            mediaViewModel.writeToCapturedMedia(listOf(it))
+                            mediaList.refresh()
+                            navigateToPreview()
+                        }
                     }
                 },
                 onError = {
@@ -161,7 +190,9 @@ internal fun CameraFooter(
     ) {
         Image(
             modifier = Modifier.size(Dimens.Three),
-            imageVector = Icons.Filled.ExpandLess,
+            painter = painterResource(
+                id = R.drawable.arrow_down
+            ),
             contentDescription = null,
             colorFilter = ColorFilter.tint(
                 color = Color.White

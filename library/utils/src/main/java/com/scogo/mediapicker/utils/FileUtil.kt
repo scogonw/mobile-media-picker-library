@@ -24,6 +24,7 @@ object FileUtil {
 
     private const val DOCUMENTS_DIR = "documents"
     private const val MIME_IMAGE_JPEG = "image/jpeg"
+    private const val MIME_VIDEO = "video"
     private const val IMAGES_FOLDER_NAME = "Scogo"
 
     fun saveFile(context: Context, uri: Uri): File? {
@@ -174,10 +175,12 @@ object FileUtil {
     fun saveImage(
         context: Context?,
         uri: Uri?,
-    ) {
-        if(uri == null || context == null) return
+    ): Uri? {
+        if(uri == null || context == null) return null
+        var mediaUri: Uri? = null
         try {
             val actualUri = saveFileFromUri(context,uri) ?: Uri.EMPTY
+            mediaUri = actualUri
             val bitmap = getBitmap(context, actualUri)
             val mimeType = getMimeType(actualUri,context)
             val fos: OutputStream? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -207,7 +210,26 @@ object FileUtil {
         } catch(e: Error) {
             e.printStackTrace()
         }
+        return mediaUri
     }
+
+    fun saveImageIfNotVideo(
+        context: Context?,
+        uri: Uri?
+    ): Uri? {
+        if(context == null || uri == null) return null
+        return if(isVideo(context,uri)) {
+            uri
+        }else {
+            saveImage(context,uri)
+        }
+    }
+
+    fun isVideo(context: Context, uri: Uri): Boolean {
+        val mimeType = getMimeType(uri, context)
+        return mimeType?.contains(MIME_VIDEO) == true
+    }
+
     private fun getBitmap(context: Context, uri: Uri): Bitmap? {
         val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
         return BitmapFactory.decodeStream(inputStream)

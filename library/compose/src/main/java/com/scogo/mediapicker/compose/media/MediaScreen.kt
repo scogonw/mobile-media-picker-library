@@ -1,5 +1,8 @@
 package com.scogo.mediapicker.compose.media
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,23 +13,30 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.Image
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.LazyPagingItems
+import com.scogo.mediapicker.common.ui.components.custom.BottomActionBar
 import com.scogo.mediapicker.common.ui.components.media.MediaView
+import com.scogo.mediapicker.common.ui_res.R
 import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.core.media.MediaData
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun MediaScreen(
     modifier: Modifier = Modifier,
     mediaViewModel: MediaViewModel,
     mediaList: LazyPagingItems<MediaData>,
-    navigateToPreview: (MediaData) -> Unit,
+    navigateToPreview: () -> Unit,
     onBack: () -> Unit,
 ) {
     val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+    val selectedMedia = mediaViewModel.selectedMediaList.collectAsState()
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -48,6 +58,23 @@ internal fun MediaScreen(
                 backgroundColor = MaterialTheme.colors.background
             )
         },
+        bottomBar = {
+            val visible = remember { mutableStateOf(false) }
+            visible.value = selectedMedia.value.isNotEmpty()
+            AnimatedVisibility(
+                visible = visible.value,
+                enter = slideInVertically() + fadeIn(),
+                exit = shrinkOut(spring(Spring.DampingRatioHighBouncy)) + fadeOut(),
+            ) {
+                BottomActionBar(
+                    modifier = Modifier.fillMaxWidth(),
+                    header = stringResource(R.string.view_selected),
+                    icon = Icons.Default.Image,
+                    actionName = stringResource(R.string.add_with_count, selectedMedia.value.size),
+                    onActionClick = navigateToPreview
+                )
+            }
+        },
         content = { innerPadding ->
             Column(
                 modifier = Modifier.padding(innerPadding)
@@ -57,7 +84,9 @@ internal fun MediaScreen(
                     state = listState,
                     lazyMediaList = mediaList,
                     onItemClick = {
-                        mediaViewModel.selectMedia(it)
+                        scope.launch {
+                            mediaViewModel.selectMedia(it)
+                        }
                     }
                 )
             }

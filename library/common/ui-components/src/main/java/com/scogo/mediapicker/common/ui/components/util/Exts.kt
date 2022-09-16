@@ -9,10 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -25,6 +22,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.scogo.mediapicker.common.ui_res.R
+import kotlinx.coroutines.delay
 
 @SuppressLint("CheckResult")
 fun ImageView.load(
@@ -116,4 +114,38 @@ fun LazyListState.isScrolledToTheNearEnd(
         atNearBottom = (lastIndex == count - i)
     }
     return atNearBottom
+}
+
+/**
+ * Requires State<Boolean>
+ * val interactionSource = remember { MutableInteractionSource() }
+ * val isPressed by interactionSource.collectIsPressedAsState()
+ *
+ * isPressed.detectGestures(...)
+ */
+@Composable
+fun DetectGestures(
+    pressedState: State<Boolean>,
+    onClick: () -> Unit,
+    onHold: (released: Boolean) -> Unit,
+) {
+    val wasClickEvent = remember { mutableStateOf(false) }
+    val isHoldActive = remember { mutableStateOf(false) }
+
+    LaunchedEffect(pressedState.value) {
+        if(pressedState.value) {
+            wasClickEvent.value = true
+            delay(500)
+            isHoldActive.value = true
+            onHold(false)
+        } else {
+            if(isHoldActive.value) {
+                onHold(true)
+            }else if(wasClickEvent.value){
+                onClick()
+            }
+            isHoldActive.value = false
+            wasClickEvent.value = false
+        }
+    }
 }
