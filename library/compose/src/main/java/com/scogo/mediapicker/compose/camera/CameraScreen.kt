@@ -159,9 +159,9 @@ private fun CameraScreen(
                         )
                     }
                 },
-                onImageCaptured = {
+                onMediaCaptured = { uri ->
                     scope.launch(Dispatchers.IO) {
-                        FileUtil.saveImage(context, it)?.let {
+                        FileUtil.saveImageIfNotVideo(context,uri)?.let {
                             mediaViewModel.writeToCapturedMedia(listOf(it))
                             mediaList.refresh()
                             navigateToPreview()
