@@ -57,7 +57,7 @@ internal fun CameraView(
     val timerState = holder.timer.readTime().collectAsState()
     val isRecording = rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(isRecording) {
+    LaunchedEffect(isRecording.value) {
         if(isRecording.value) {
             holder.timer.start()
         }else {
