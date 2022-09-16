@@ -233,7 +233,7 @@ internal fun CameraView(
                                 .size(Dimens.Nine)
                                 .padding(Dimens.HalfQuarter)
                                 .border(Dimens.Quarter, Color.White, CircleShape),
-                            tint = Color.White
+                            tint = if(isRecording.value) Color.Red else Color.White
                         )
                     },
                 )

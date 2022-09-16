@@ -21,7 +21,7 @@ fun CameraActionIcon(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed = interactionSource.collectIsPressedAsState()
 
-    val scaleAnim by animateFloatAsState(if(isPressed.value) 0.8f else 1f)
+    val scaleAnim by animateFloatAsState(if(isPressed.value) 0.9f else 1f)
 
     DetectGestures(
         pressedState = isPressed,
