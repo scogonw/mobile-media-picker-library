@@ -15,11 +15,15 @@ class MediaPicker private constructor() {
         fun pick(
             activity: Activity,
             multiple: Boolean = false,
+            captionMandatory: Boolean = false,
             callback: MediaPickerCallback,
         ) {
             val worker = PickerRequestWorker.getInstance()
             val request = worker.enqueue(
-                config = MediaPickerConfiguration(multiple),
+                config = MediaPickerConfiguration(
+                    multipleAllowed = multiple,
+                    captionMandatory = captionMandatory
+                ),
                 callback = callback
             )
             val intent = Intent(activity, HomeActivity::class.java)

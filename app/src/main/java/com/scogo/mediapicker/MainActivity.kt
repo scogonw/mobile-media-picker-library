@@ -21,7 +21,8 @@ class MainActivity : AppCompatActivity() {
                 onClick = {
                     MediaPicker.pick(
                         activity = this,
-                        multiple = false,
+                        multiple = true,
+                        captionMandatory = true,
                         callback = onMediaPick {
                             runOnUiThread {
 

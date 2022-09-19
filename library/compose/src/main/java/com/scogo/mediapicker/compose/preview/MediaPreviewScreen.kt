@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -17,6 +18,7 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.scogo.mediapicker.common.ui.components.custom.AddCaption
 import com.scogo.mediapicker.common.ui.components.media.MediaPreviewListView
+import com.scogo.mediapicker.common.ui_res.R
 import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.compose.util.activityMediaViewModel
@@ -56,30 +58,44 @@ private fun MediaPreviewView(
 ) {
     BackHandler(onBack = onBack)
 
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
     val pagerState = rememberPagerState()
 
-    val selectedImages = mediaViewModel.selectedMediaList.collectAsState()
+    val uiState = mediaViewModel.uiState.collectAsState()
+    val selectedMediaList = mediaViewModel.selectedMediaList.collectAsState()
+
+    val capturedMediaList = mediaViewModel.readCapturedMedia()
+    val previewForCapturedMedia = capturedMediaList.isNotEmpty()
+
+    val currentMediaList = if(previewForCapturedMedia) capturedMediaList
+    else selectedMediaList.value
+
     val currentMedia = remember { mutableStateOf(MediaData.EMPTY) }
-
-    val capturedImages = mediaViewModel.readCapturedMedia()
-    val previewForCapturedImages = capturedImages.isNotEmpty()
-
     val captionFieldState = remember { mutableStateOf(TextFieldValue("")) }
 
     LaunchedEffect(captionFieldState.value) {
         currentMedia.value.caption = captionFieldState.value.text
     }
 
+    LaunchedEffect(uiState.value) {
+        val msg = uiState.value.message
+        if(msg.isNotEmpty()) {
+            scaffoldState.snackbarHostState.showSnackbar(
+                message = msg
+            )
+            with(mediaViewModel) {
+                clearMessage()
+            }
+        }
+    }
+
     LaunchedEffect(pagerState) {
         snapshotFlow {
             pagerState.currentPage
         }.distinctUntilChanged().collectIndexed { _, page ->
-            currentMedia.value = if(previewForCapturedImages) {
-                capturedImages[page]
-            }else {
-                selectedImages.value[page]
-            }
+            currentMedia.value = currentMediaList[page]
             captionFieldState.value = TextFieldValue(
                 text = currentMedia.value.caption ?: ""
             )
@@ -129,16 +145,28 @@ private fun MediaPreviewView(
                                     .fillMaxWidth()
                                     .height(this@BoxWithConstraints.maxHeight / 2),
                                 state = pagerState,
-                                mediaList = if(previewForCapturedImages) {
-                                    capturedImages
-                                }else {
-                                    selectedImages.value
-                                }
+                                mediaList = currentMediaList
                             )
                             AddCaption(
                                 modifier = Modifier.align(Alignment.BottomCenter),
                                 textFieldState = captionFieldState,
-                                onActionClick = onMediaPicked
+                                onActionClick = {
+                                    if (mediaViewModel.captionMandatory()) {
+                                        val index = mediaViewModel.isCaptionsEmpty(currentMediaList)
+                                        if(index == -1) {
+                                            onMediaPicked()
+                                        }else {
+                                            scope.launch {
+                                                mediaViewModel.showMessage(
+                                                    msg = context.getString(R.string.please_add_caption)
+                                                )
+                                                pagerState.animateScrollToPage(index)
+                                            }
+                                        }
+                                    } else {
+                                        onMediaPicked()
+                                    }
+                                }
                             )
                         }
                     )
