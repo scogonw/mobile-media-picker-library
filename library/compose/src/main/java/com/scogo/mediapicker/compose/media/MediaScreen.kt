@@ -14,7 +14,9 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Image
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -59,10 +61,8 @@ internal fun MediaScreen(
             )
         },
         bottomBar = {
-            val visible = remember { mutableStateOf(false) }
-            visible.value = selectedMedia.value.isNotEmpty()
             AnimatedVisibility(
-                visible = visible.value,
+                visible = selectedMedia.value.isNotEmpty(),
                 enter = slideInVertically() + fadeIn(),
                 exit = shrinkOut(spring(Spring.DampingRatioHighBouncy)) + fadeOut(),
             ) {

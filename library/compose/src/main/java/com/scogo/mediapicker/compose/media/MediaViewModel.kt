@@ -1,6 +1,5 @@
 package com.scogo.mediapicker.compose.media
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -21,10 +20,14 @@ import kotlinx.coroutines.sync.withLock
 internal class MediaViewModel(
     private val repo: MediaRepository
 ): ViewModel() {
+    private val _uiState = MutableStateFlow(MediaUiState.EMPTY)
+    val uiState: StateFlow<MediaUiState> get() = _uiState
+
     private val worker = PickerRequestWorker.getInstance()
     private lateinit var requestData: PickerRequestData
 
     fun readRequestData() = requestData
+    fun captionMandatory() = readRequestData().readPickerConfig().captionMandatory
     fun readCapturedMedia() = requestData.readCapturedMedia()
 
     private val _selectedMediaList = MutableStateFlow<List<MediaData>>(emptyList())
@@ -57,6 +60,27 @@ internal class MediaViewModel(
         ).flow.cachedIn(viewModelScope)
     }
 
+    fun syncSelectedMediaList() {
+        viewModelScope.launch {
+            changeSelectedMediaList(
+                list = requestData.readSelectedMedia()
+            )
+        }
+    }
+
+    fun isCaptionsEmpty(list: List<MediaData>): Int {
+        var index = -1
+        run breaker@ {
+            list.forEachIndexed { i, it ->
+                if(it.caption?.trim().isNullOrEmpty()) {
+                    index = i
+                    return@breaker
+                }
+            }
+        }
+        return index
+    }
+
     suspend fun selectMedia(mediaData: MediaData) {
         if (isMediaSelectionEnable(mediaData.id)) {
             var selected = mediaData.selected.value
@@ -78,12 +102,6 @@ internal class MediaViewModel(
         else selectedMedia.size == 1 && selectedMedia[0].id == id
     }
 
-    fun syncSelectedMediaList() {
-        viewModelScope.launch {
-            changeSelectedMediaList(requestData.readSelectedMedia())
-        }
-    }
-
     private suspend fun changeSelectedMediaList(list: List<MediaData>){
         requestData.changeSelectedMedia(list)
         selectedMediaMutex.withLock {
@@ -91,7 +109,7 @@ internal class MediaViewModel(
         }
     }
 
-    suspend fun writeToCapturedMedia(list: List<Uri>) {
+    suspend fun writeToCapturedMedia(list: List<MediaData>) {
         requestData.changeCapturedMedia(list)
     }
 
@@ -104,5 +122,15 @@ internal class MediaViewModel(
         changeSelectedMediaList(emptyList())
     }
 
+    fun showMessage(msg: String) {
+        _uiState.value = _uiState.value.copy(
+            message = msg
+        )
+    }
 
+    fun clearMessage() {
+        _uiState.value = _uiState.value.copy(
+            message = ""
+        )
+    }
 }

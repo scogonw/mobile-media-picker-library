@@ -1,6 +1,5 @@
 package com.scogo.mediapicker.core.request
 
-import android.net.Uri
 import com.scogo.mediapicker.core.callback.MediaPickerCallback
 import com.scogo.mediapicker.core.media.MediaData
 import com.scogo.mediapicker.core.media.MediaPickerConfiguration
@@ -45,11 +44,9 @@ class PickerRequestData private constructor(
         }
     }
 
-    suspend fun changeCapturedMedia(list: List<Uri>) {
+    suspend fun changeCapturedMedia(list: List<MediaData>) {
         capturedMediaLock.withLock {
-            capturedMedia = list.map {
-                MediaData.create(it)
-            }
+            capturedMedia = list
         }
     }
 

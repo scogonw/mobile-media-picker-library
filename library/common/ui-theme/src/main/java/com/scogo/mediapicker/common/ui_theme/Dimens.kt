@@ -27,5 +27,4 @@ object ButtonDimes {
     val Four = 16.dp
     val Five = 20.dp
     val Six = 50.dp
-    val Seven = 54.dp
 }
