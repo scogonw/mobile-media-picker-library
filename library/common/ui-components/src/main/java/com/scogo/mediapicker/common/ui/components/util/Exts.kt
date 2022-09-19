@@ -135,7 +135,7 @@ fun DetectGestures(
     LaunchedEffect(pressedState.value) {
         if(pressedState.value) {
             wasClickEvent.value = true
-            delay(500)
+            delay(300)
             isHoldActive.value = true
             onHold(false)
         } else {
