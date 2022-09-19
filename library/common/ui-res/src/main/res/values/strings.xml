@@ -9,5 +9,6 @@
     <string name="add_with_count">Add (%1$s)</string>
     <string name="add_caption">Add Caption</string>
     <string name="enter_your_caption">Enter Your Caption…</string>
+    <string name="tap_to_capture_hold_to_record">Tap to capture, Hold to record</string>
 
 </resources>
