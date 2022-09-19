@@ -191,7 +191,7 @@ internal fun CameraFooter(
         Image(
             modifier = Modifier.size(Dimens.Three),
             painter = painterResource(
-                id = R.drawable.arrow_down
+                id = R.drawable.arrow_up
             ),
             contentDescription = null,
             colorFilter = ColorFilter.tint(

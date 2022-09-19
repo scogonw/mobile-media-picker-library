@@ -55,7 +55,9 @@ fun IconRoundedButton(
     onActionClick: () -> Unit = {},
 ) {
     Button(
-        modifier = modifier.clickable(
+        modifier = modifier
+            .size(Dimens.Six)
+            .clickable(
                 interactionSource = MutableInteractionSource(),
                 indication = rememberRipple(
                     bounded = true,

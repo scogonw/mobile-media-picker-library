@@ -15,6 +15,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Cameraswitch
 import androidx.compose.material.icons.sharp.FlashAuto
@@ -27,10 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.util.Consumer
 import com.scogo.mediapicker.common.ui.components.camera.CameraActionIcon
 import com.scogo.mediapicker.common.ui.components.custom.Chip
+import com.scogo.mediapicker.common.ui_res.R.string
 import com.scogo.mediapicker.common.ui_theme.ButtonDimes
 import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.core.media.MimeTypes
@@ -49,7 +53,7 @@ internal fun CameraView(
     bottomContent: @Composable () -> Unit = {},
     onMediaCaptured: (Uri) -> Unit,
     onError: (Exception) -> Unit
-){
+) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -58,9 +62,9 @@ internal fun CameraView(
     val isRecording = rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(isRecording.value) {
-        if(isRecording.value) {
+        if (isRecording.value) {
             holder.timer.start()
-        }else {
+        } else {
             holder.timer.stop()
         }
     }
@@ -77,7 +81,7 @@ internal fun CameraView(
         PreviewView(context)
     }
 
-    val imageCapture =  ImageCapture.Builder()
+    val imageCapture = ImageCapture.Builder()
         .setFlashMode(flashModeAuto.value)
         .build()
 
@@ -108,20 +112,20 @@ internal fun CameraView(
         .build()
 
     val recording = videoCapture.output
-        .prepareRecording(context,mediaStoreOutputOptions)
+        .prepareRecording(context, mediaStoreOutputOptions)
         .withAudioEnabled()
 
     val videoRecordingListener = Consumer<VideoRecordEvent> { event ->
-        when(event) {
+        when (event) {
             is VideoRecordEvent.Start -> {
                 isRecording.value = true
             }
             is VideoRecordEvent.Finalize -> {
                 isRecording.value = false
-                if(!event.hasError()) {
+                if (!event.hasError()) {
                     val uri = event.outputResults.outputUri
                     onMediaCaptured(uri)
-                }else {
+                } else {
                     holder.recordingSession?.close()
                     holder.recordingSession = null
                 }
@@ -151,26 +155,31 @@ internal fun CameraView(
             },
             modifier = Modifier.fillMaxSize()
         )
-        if(isRecording.value) {
+        if (isRecording.value) {
             Chip(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(Dimens.Two)
-                ,
+                    .padding(Dimens.Two),
                 text = timerState.value
             )
         }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter)
+                .align(Alignment.BottomCenter),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             footerContent()
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = Dimens.Four, vertical = Dimens.Three),
+                    .padding(
+                        start = Dimens.Four,
+                        end = Dimens.Four,
+                        top = Dimens.Three,
+                        bottom = Dimens.One
+                    ),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -180,17 +189,17 @@ internal fun CameraView(
                         shape = CircleShape
                     ),
                     onClick = {
-                        flashModeAuto.value = if(flashModeAuto.value == ImageCapture.FLASH_MODE_AUTO) {
-                            ImageCapture.FLASH_MODE_ON
-                        }else {
-                            ImageCapture.FLASH_MODE_AUTO
-                        }
+                        flashModeAuto.value = if (flashModeAuto.value == ImageCapture.FLASH_MODE_AUTO) {
+                                ImageCapture.FLASH_MODE_ON
+                            } else {
+                                ImageCapture.FLASH_MODE_AUTO
+                            }
                     },
                     content = {
                         Icon(
-                            imageVector = if(flashModeAuto.value == ImageCapture.FLASH_MODE_AUTO){
+                            imageVector = if (flashModeAuto.value == ImageCapture.FLASH_MODE_AUTO) {
                                 Icons.Sharp.FlashAuto
-                            }else {
+                            } else {
                                 Icons.Sharp.FlashOn
                             },
                             contentDescription = null,
@@ -215,12 +224,12 @@ internal fun CameraView(
                     },
                     onHold = { released ->
                         holder.recordingSession = if (!released && holder.recordingSession == null) {
-                            recording.start(executor, videoRecordingListener)
-                        } else {
-                            isRecording.value = false
-                            holder.recordingSession?.stop()
-                            null
-                        }
+                                recording.start(executor, videoRecordingListener)
+                            } else {
+                                isRecording.value = false
+                                holder.recordingSession?.stop()
+                                null
+                            }
                     },
                     content = {
                         Icon(
@@ -230,7 +239,7 @@ internal fun CameraView(
                                 .size(Dimens.Nine)
                                 .padding(Dimens.HalfQuarter)
                                 .border(Dimens.Quarter, Color.White, CircleShape),
-                            tint = if(isRecording.value) Color.Red else Color.White
+                            tint = if (isRecording.value) Color.Red else Color.White
                         )
                     },
                 )
@@ -240,11 +249,11 @@ internal fun CameraView(
                         shape = CircleShape
                     ),
                     onClick = {
-                        lensFacing.value = if(lensFacing.value == CameraSelector.LENS_FACING_BACK) {
-                            CameraSelector.LENS_FACING_FRONT
-                        } else {
-                            CameraSelector.LENS_FACING_BACK
-                        }
+                        lensFacing.value = if (lensFacing.value == CameraSelector.LENS_FACING_BACK) {
+                                CameraSelector.LENS_FACING_FRONT
+                            } else {
+                                CameraSelector.LENS_FACING_BACK
+                            }
                     },
                     content = {
                         Icon(
@@ -258,7 +267,12 @@ internal fun CameraView(
                     }
                 )
             }
-
+            Text(
+                modifier = Modifier.padding(bottom = Dimens.Three),
+                text = stringResource(id = string.tap_to_capture_hold_to_record),
+                style = MaterialTheme.typography.caption,
+                color = Color.White,
+            )
             bottomContent()
         }
     }
