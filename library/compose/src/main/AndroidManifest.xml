@@ -5,9 +5,11 @@
         <activity
             android:name="com.scogo.mediapicker.compose.home.HomeActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             />
         <activity android:name=".preview.MediaPreviewActivity"
             android:enabled="true"
+            android:screenOrientation="portrait"
             />
     </application>
 </manifest>
