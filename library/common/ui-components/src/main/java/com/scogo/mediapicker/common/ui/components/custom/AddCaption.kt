@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.scogo.mediapicker.common.ui_res.R
 import com.scogo.mediapicker.common.ui_theme.ButtonDimes
 import com.scogo.mediapicker.common.ui_theme.Dimens
+import com.scogo.mediapicker.common.ui_theme.LightBlue
 
 @Composable
 fun AddCaption(
@@ -52,7 +53,7 @@ fun AddCaption(
             shape = RoundedCornerShape(Dimens.Four),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 backgroundColor = Color.White,
-                focusedBorderColor = Color.Transparent
+                focusedBorderColor = LightBlue
             ),
         )
         IconRoundedButton(
