@@ -64,8 +64,10 @@ internal fun CameraView(
 
     LaunchedEffect(isRecording.value) {
         if (isRecording.value) {
+            mediaActionSound.play(MediaActionSound.START_VIDEO_RECORDING)
             holder.timer.start()
         } else {
+            mediaActionSound.play(MediaActionSound.STOP_VIDEO_RECORDING)
             holder.timer.stop()
         }
     }
