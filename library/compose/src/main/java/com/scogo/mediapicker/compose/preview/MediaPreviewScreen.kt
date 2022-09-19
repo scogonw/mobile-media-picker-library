@@ -3,21 +3,26 @@ package com.scogo.mediapicker.compose.preview
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.filled.Send
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import com.scogo.mediapicker.common.ui.components.custom.IconRoundedButton
 import com.scogo.mediapicker.common.ui.components.media.MediaPreviewListView
+import com.scogo.mediapicker.common.ui_res.R.string
+import com.scogo.mediapicker.common.ui_theme.ButtonDimes
 import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.compose.util.activityMediaViewModel
@@ -98,8 +103,7 @@ private fun MediaPreviewView(
                             MediaHorizontalPager(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(this@BoxWithConstraints.maxHeight / 2)
-                                ,
+                                    .height(this@BoxWithConstraints.maxHeight / 2),
                                 state = pagerState,
                                 mediaList = capturedImages.ifEmpty {
                                     selectedImages.value
@@ -107,6 +111,7 @@ private fun MediaPreviewView(
                             )
                         }
                     )
+                    AddCaption(modifier = Modifier.fillMaxWidth())
                 }
             )
         }
@@ -141,5 +146,55 @@ private fun Preview() {
         onBack = {
 
         }
+    )
+}
+
+@Composable
+fun AddCaption(
+    modifier: Modifier,
+    onActionClick: () -> Unit = {}
+) {
+    var text by remember { mutableStateOf(TextFieldValue("")) }
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = Dimens.One, vertical = Dimens.Two),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        OutlinedTextField(
+            modifier = Modifier
+                .height(ButtonDimes.Six)
+                .weight(1f)
+                .padding(Dimens.Zero),
+            value = text,
+            onValueChange = {
+                text = it
+            },
+            placeholder = {
+                Text(
+                    text = stringResource(id = string.enter_your_caption),
+                    style = MaterialTheme.typography.subtitle2,
+                )
+            },
+            shape = RoundedCornerShape(Dimens.Four),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = Color.White,
+                focusedBorderColor = Color.Transparent
+            ),
+        )
+        IconRoundedButton(
+            modifier = Modifier.padding(start = Dimens.One),
+            icon = Icons.Filled.Send,
+            onActionClick
+        )
+    }
+}
+
+@Preview
+@Composable
+fun AddCaptionPreview() {
+    AddCaption(
+        modifier = Modifier,
+        onActionClick = {}
     )
 }

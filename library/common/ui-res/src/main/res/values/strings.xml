@@ -6,4 +6,6 @@
 
     <string name="view_selected">View Selected</string>
     <string name="add_with_count">Add (%1$s)</string>
+    <string name="add_caption">Add Caption</string>
+    <string name="enter_your_caption">Enter Your Caption…</string>
 </resources>
