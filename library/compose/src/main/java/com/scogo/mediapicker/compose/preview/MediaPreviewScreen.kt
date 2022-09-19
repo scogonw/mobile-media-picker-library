@@ -83,7 +83,8 @@ private fun MediaPreviewView(
         val msg = uiState.value.message
         if(msg.isNotEmpty()) {
             scaffoldState.snackbarHostState.showSnackbar(
-                message = msg
+                message = msg,
+                duration = SnackbarDuration.Short
             )
             with(mediaViewModel) {
                 clearMessage()
