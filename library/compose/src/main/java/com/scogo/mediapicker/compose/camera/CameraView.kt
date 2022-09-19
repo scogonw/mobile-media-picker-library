@@ -64,10 +64,8 @@ internal fun CameraView(
 
     LaunchedEffect(isRecording.value) {
         if (isRecording.value) {
-            mediaActionSound.play(MediaActionSound.START_VIDEO_RECORDING)
             holder.timer.start()
         } else {
-            mediaActionSound.play(MediaActionSound.STOP_VIDEO_RECORDING)
             holder.timer.stop()
         }
     }
@@ -121,9 +119,11 @@ internal fun CameraView(
     val videoRecordingListener = Consumer<VideoRecordEvent> { event ->
         when (event) {
             is VideoRecordEvent.Start -> {
+                mediaActionSound.play(MediaActionSound.START_VIDEO_RECORDING)
                 isRecording.value = true
             }
             is VideoRecordEvent.Finalize -> {
+                mediaActionSound.play(MediaActionSound.STOP_VIDEO_RECORDING)
                 isRecording.value = false
                 if (!event.hasError()) {
                     val uri = event.outputResults.outputUri
