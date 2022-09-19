@@ -106,8 +106,8 @@ private fun MediaPreviewView(
     Scaffold(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Black)
-        ,
+            .statusBarsPadding()
+            .background(Color.Black),
         scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
@@ -149,7 +149,9 @@ private fun MediaPreviewView(
                                 mediaList = currentMediaList
                             )
                             AddCaption(
-                                modifier = Modifier.align(Alignment.BottomCenter),
+                                modifier = Modifier
+                                    .imePadding()
+                                    .align(Alignment.BottomCenter),
                                 textFieldState = captionFieldState,
                                 onActionClick = {
                                     if (mediaViewModel.captionMandatory()) {

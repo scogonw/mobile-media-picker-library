@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.core.view.WindowCompat
 import com.scogo.mediapicker.common.ui_theme.ScogoTheme
 import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.compose.media.MediaViewModelFactory
@@ -32,6 +33,8 @@ internal class MediaPreviewActivity: ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         val workId = intent.extras?.getString(WORK_ID)
         if(!mediaViewModel.initRequestData(workId)) finish()
         else mediaViewModel.syncSelectedMediaList()
