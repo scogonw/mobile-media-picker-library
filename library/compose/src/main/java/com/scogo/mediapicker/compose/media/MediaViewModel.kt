@@ -70,10 +70,12 @@ internal class MediaViewModel(
 
     fun isCaptionsEmpty(list: List<MediaData>): Int {
         var index = -1
-        list.forEachIndexed { i, it ->
-            if(it.caption?.trim().isNullOrEmpty()) {
-                index = i
-                return@forEachIndexed
+        run breaker@ {
+            list.forEachIndexed { i, it ->
+                if(it.caption?.trim().isNullOrEmpty()) {
+                    index = i
+                    return@breaker
+                }
             }
         }
         return index
