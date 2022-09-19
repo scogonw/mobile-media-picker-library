@@ -1,6 +1,7 @@
 package com.scogo.mediapicker.common.ui.components.custom
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
@@ -18,7 +19,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.scogo.mediapicker.common.ui_theme.ButtonDimes
 import com.scogo.mediapicker.common.ui_theme.Dimens
-import com.scogo.mediapicker.common.ui_theme.LightBlue
 import com.scogo.mediapicker.common.ui_theme.LightGrey
 
 @Composable
@@ -27,7 +27,8 @@ fun BottomActionBar(
     header: String,
     actionName: String,
     icon: ImageVector,
-    onActionClick: () -> Unit = {}
+    onActionClick: () -> Unit,
+    onDismiss: () -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -57,6 +58,7 @@ fun BottomActionBar(
             ) {
                 Box(
                     modifier = Modifier
+                        .clickable { onDismiss() }
                         .background(color = Color.LightGray, shape = CircleShape)
                         .size(Dimens.Three),
                     contentAlignment = Alignment.Center,
@@ -88,6 +90,8 @@ private fun Preview() {
         modifier = Modifier.fillMaxWidth(),
         header = "View",
         actionName = "Add",
-        icon = Icons.Default.Image
+        icon = Icons.Default.Image,
+        onActionClick = {},
+        onDismiss = {}
     )
 }

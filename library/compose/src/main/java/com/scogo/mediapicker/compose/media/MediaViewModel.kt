@@ -118,8 +118,11 @@ internal class MediaViewModel(
     }
 
     suspend fun clearMediaSelection() {
+        selectedMedia.forEach {
+            it.selected.value = false
+        }
         selectedMedia.clear()
-        changeSelectedMediaList(emptyList())
+        changeSelectedMediaList(selectedMedia)
     }
 
     fun showMessage(msg: String) {

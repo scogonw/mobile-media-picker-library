@@ -50,6 +50,7 @@ internal fun CameraScreen(
     outputDir: File,
     navigateToPreview: (workId: String, activity: Activity) -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
     val activity = composeActivity()
     val mediaViewModel = activityMediaViewModel()
 
@@ -63,6 +64,11 @@ internal fun CameraScreen(
                 mediaViewModel.readRequestData().readId(),
                 activity
             )
+        },
+        clearMediaSelection = {
+            scope.launch {
+                mediaViewModel.clearMediaSelection()
+            }
         },
         onBackPress = {
             activity.finish()
@@ -78,6 +84,7 @@ private fun CameraScreen(
     outputDir: File,
     executor: Executor,
     navigateToPreview: () -> Unit,
+    clearMediaSelection: () -> Unit,
     onBackPress: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -115,6 +122,7 @@ private fun CameraScreen(
                 mediaViewModel = mediaViewModel,
                 mediaList = mediaList,
                 navigateToPreview = navigateToPreview,
+                clearMediaSelection = clearMediaSelection,
                 onBack = {
                     scope.launch {
                         sheetState.animatedHide()
@@ -155,7 +163,8 @@ private fun CameraScreen(
                             header = stringResource(R.string.view_selected),
                             icon = Icons.Default.Image,
                             actionName = stringResource(R.string.add_with_count, selectedMedia.value.size),
-                            onActionClick = navigateToPreview
+                            onActionClick = navigateToPreview,
+                            onDismiss = clearMediaSelection
                         )
                     }
                 },
