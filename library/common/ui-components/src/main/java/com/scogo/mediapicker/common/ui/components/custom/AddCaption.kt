@@ -37,7 +37,7 @@ fun AddCaption(
     ) {
         OutlinedTextField(
             modifier = Modifier
-                .height(ButtonDimes.Six)
+                //.height(ButtonDimes.Six)
                 .weight(1f)
                 .padding(Dimens.Zero),
             value = text,
