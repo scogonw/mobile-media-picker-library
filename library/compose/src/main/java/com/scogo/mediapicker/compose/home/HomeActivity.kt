@@ -10,10 +10,13 @@ import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.compose.media.MediaViewModelFactory
 import com.scogo.mediapicker.compose.navigation.AppNavigationParams
 import com.scogo.mediapicker.core.data.impl.MediaRepositoryImpl
+import com.scogo.mediapicker.core.event.PushEvent
 import com.scogo.mediapicker.utils.Consts.WORK_ID
 import com.scogo.mediapicker.utils.getScogoMediaDirectory
 import com.scogo.mediapicker.utils.isPermissionsGranted
-
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 internal class HomeActivity : ComponentActivity() {
 
@@ -45,6 +48,27 @@ internal class HomeActivity : ComponentActivity() {
                     params = appNavParams
                 )
             }
+        }
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    fun onEvent(event: PushEvent) {
+        if(event.workId == mediaViewModel.readRequestData().readId()) {
+            finish()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if(EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this)
         }
     }
 }

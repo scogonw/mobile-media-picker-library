@@ -11,7 +11,7 @@ data class MediaData(
     val displayName: String?,
     val date: String?,
     val dateTaken: Long?,
-    val caption: String?,
+    var caption: String?,
     val bucketName: String?,
     var selected: MutableStateFlow<Boolean> = MutableStateFlow(false),
 ) {

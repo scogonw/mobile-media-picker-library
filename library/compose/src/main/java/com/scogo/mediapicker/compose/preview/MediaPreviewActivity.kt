@@ -10,7 +10,9 @@ import com.scogo.mediapicker.common.ui_theme.ScogoTheme
 import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.compose.media.MediaViewModelFactory
 import com.scogo.mediapicker.core.data.impl.MediaRepositoryImpl
+import com.scogo.mediapicker.core.event.PushEvent
 import com.scogo.mediapicker.utils.Consts.WORK_ID
+import org.greenrobot.eventbus.EventBus
 
 internal class MediaPreviewActivity: ComponentActivity() {
 
@@ -30,7 +32,6 @@ internal class MediaPreviewActivity: ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val workId = intent.extras?.getString(WORK_ID)
         if(!mediaViewModel.initRequestData(workId)) finish()
         else mediaViewModel.syncSelectedMediaList()
@@ -38,6 +39,13 @@ internal class MediaPreviewActivity: ComponentActivity() {
         setContent {
             ScogoTheme {
                 MediaPreviewScreen(
+                    onMediaPicked = {
+                        mediaViewModel.readRequestData().mediaPicked()
+                        EventBus.getDefault().postSticky(PushEvent(
+                            workId = mediaViewModel.readRequestData().readId()
+                        ))
+                        finish()
+                    },
                     onBack = {
                         finish()
                     }
