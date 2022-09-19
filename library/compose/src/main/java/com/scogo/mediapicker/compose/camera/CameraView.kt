@@ -60,6 +60,7 @@ internal fun CameraView(
     val holder = CameraStateHolder
     val timerState = holder.timer.readTime().collectAsState()
     val isRecording = rememberSaveable { mutableStateOf(false) }
+    val refreshPreview = remember { mutableStateOf(false) }
 
     LaunchedEffect(isRecording.value) {
         if (isRecording.value) {
@@ -124,6 +125,7 @@ internal fun CameraView(
                 isRecording.value = false
                 if (!event.hasError()) {
                     val uri = event.outputResults.outputUri
+                    refreshPreview.value = false
                     onMediaCaptured(uri)
                 } else {
                     holder.recordingSession?.close()
@@ -133,7 +135,7 @@ internal fun CameraView(
         }
     }
 
-    LaunchedEffect(lensFacing.value, flashModeAuto.value) {
+    LaunchedEffect(lensFacing.value, flashModeAuto.value, refreshPreview.value) {
         val cameraProvider = context.getCameraProvider()
         cameraProvider.unbindAll()
         cameraProvider.bindToLifecycle(
@@ -144,6 +146,12 @@ internal fun CameraView(
             videoCapture
         )
         preview.setSurfaceProvider(previewView.surfaceProvider)
+    }
+
+    LaunchedEffect(refreshPreview.value) {
+        if(!refreshPreview.value) {
+            refreshPreview.value = true
+        }
     }
 
     Box(
