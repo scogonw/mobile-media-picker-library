@@ -27,11 +27,12 @@ import kotlinx.coroutines.delay
 @SuppressLint("CheckResult")
 fun ImageView.load(
     source: Any?,
+    centerCrop: Boolean = true,
     @DrawableRes placeholder: Int = R.drawable.image_placeholder,
 ): ImageView {
     val options = RequestOptions().apply {
+        if(centerCrop) centerCrop()
         placeholder(placeholder)
-        centerCrop()
         diskCacheStrategy(DiskCacheStrategy.ALL)
     }
     Glide.with(context)

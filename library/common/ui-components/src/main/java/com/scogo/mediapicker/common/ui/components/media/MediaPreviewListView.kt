@@ -28,7 +28,10 @@ fun MediaPreviewListView(
                 CustomImageView(
                     modifier = viewModifier,
                     content = {
-                        it.load(source = media.uri)
+                        it.load(
+                            source = media.uri,
+                            centerCrop = false
+                        )
                     }
                 )
             }
