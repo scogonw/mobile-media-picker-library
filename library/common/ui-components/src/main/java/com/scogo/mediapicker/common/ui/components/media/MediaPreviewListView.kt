@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import com.scogo.mediapicker.common.ui.components.custom.CustomImageView
 import com.scogo.mediapicker.common.ui.components.util.load
 import com.scogo.mediapicker.core.media.MediaData
-import com.scogo.mediapicker.core.media.MimeTypes
+import com.scogo.mediapicker.utils.isVideo
 
 @Composable
 fun MediaPreviewListView(
@@ -15,13 +15,11 @@ fun MediaPreviewListView(
     viewModifier: Modifier,
     media: MediaData,
 ) {
-    val isVideo = media.mimeType?.contains(MimeTypes.VIDEO.name) ?: false
-
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center,
         content = {
-            if(isVideo) {
+            if(media.mimeType.isVideo()) {
                 VideoView(
                     modifier = viewModifier,
                     uri = media.uri

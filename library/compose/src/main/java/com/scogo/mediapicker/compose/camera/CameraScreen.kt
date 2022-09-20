@@ -175,7 +175,7 @@ private fun CameraScreen(
                                 uri = it,
                                 mime = FileUtil.getMimeType(it,context)
                             )
-                            mediaViewModel.writeToCapturedMedia(listOf(media))
+                            mediaViewModel.writeCapturedMedia(listOf(media))
                             mediaList.refresh()
                             navigateToPreview()
                         }

@@ -95,7 +95,7 @@ fun Context.fetchMedia(
                     date = convertTimeToStringDate(this,dateTaken),
                     caption = null,
                     bucketName = null,
-                    selected = MutableStateFlow(false)
+                    selected = MutableStateFlow(false),
                 )
             )
         }

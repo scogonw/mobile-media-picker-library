@@ -17,4 +17,5 @@ dependencies {
     implementation(libs.android.accompanist.permissions)
     implementation(libs.android.accompanist.pager)
     implementation(libs.android.eventbus)
+    api(libs.android.image.cropper)
 }

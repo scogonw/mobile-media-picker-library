@@ -1,3 +1,4 @@
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -5,11 +6,16 @@ pluginManagement {
         mavenCentral()
     }
 }
+@Suppress("unstableApiUsage")
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("https://maven.google.com")
+            url = uri("https://plugins.gradle.org/m2/")
+        }
     }
 }
 rootProject.name = "ScogoMediaPicker"

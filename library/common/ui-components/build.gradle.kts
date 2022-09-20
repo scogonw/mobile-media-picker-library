@@ -5,6 +5,7 @@ dependencies {
     implementation(project(":library:core"))
     implementation(project(":library:common:ui-res"))
     implementation(project(":library:common:ui-theme"))
+    implementation(project(":library:utils"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.bundles.android.ktx)
     implementation(libs.bundles.android.compose)

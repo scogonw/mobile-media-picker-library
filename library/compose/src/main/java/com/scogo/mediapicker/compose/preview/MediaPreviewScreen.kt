@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Crop
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ import com.scogo.mediapicker.common.ui_theme.Dimens
 import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.compose.util.activityMediaViewModel
 import com.scogo.mediapicker.core.media.MediaData
+import com.scogo.mediapicker.utils.isVideo
 import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -30,7 +32,8 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun MediaPreviewScreen(
     onMediaPicked: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    cropImage: (MediaData) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val mediaViewModel = activityMediaViewModel()
@@ -39,6 +42,7 @@ internal fun MediaPreviewScreen(
         modifier = Modifier,
         mediaViewModel = mediaViewModel,
         onMediaPicked = onMediaPicked,
+        cropImage = cropImage,
         onBack = {
             scope.launch {
                 mediaViewModel.clearCapturedMedia()
@@ -54,6 +58,7 @@ private fun MediaPreviewView(
     modifier: Modifier,
     mediaViewModel: MediaViewModel,
     onMediaPicked: () -> Unit,
+    cropImage: (MediaData) -> Unit,
     onBack: () -> Unit,
 ) {
     BackHandler(onBack = onBack)
@@ -112,6 +117,8 @@ private fun MediaPreviewView(
         topBar = {
             TopAppBar(
                 title = {},
+                backgroundColor = Color.Black,
+                elevation = Dimens.Zero,
                 navigationIcon = {
                     IconButton(
                         onClick = onBack,
@@ -124,8 +131,22 @@ private fun MediaPreviewView(
                         }
                     )
                 },
-                backgroundColor = Color.Black,
-                elevation = Dimens.Zero
+                actions = {
+                    if(!currentMedia.value.mimeType.isVideo()) {
+                        IconButton(
+                            onClick = {
+                                cropImage(currentMedia.value)
+                            },
+                            content = {
+                                Icon(
+                                    imageVector = Icons.Default.Crop,
+                                    contentDescription = null,
+                                    tint = Color.White
+                                )
+                            }
+                        )
+                    }
+                }
             )
         },
         content = { innerPadding ->

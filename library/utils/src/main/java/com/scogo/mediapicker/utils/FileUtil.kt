@@ -12,8 +12,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
-import androidx.annotation.NonNull
-import androidx.annotation.Nullable
 import java.io.*
 import java.net.URLEncoder
 import java.util.*
@@ -27,7 +25,7 @@ object FileUtil {
     private const val MIME_VIDEO = "video"
     private const val IMAGES_FOLDER_NAME = "Scogo"
 
-    fun saveFile(context: Context, uri: Uri): File? {
+    private fun saveFile(context: Context, uri: Uri): File? {
         val fileName = getFileName(context, uri)
         val cacheDir = getDocumentCacheDir(context)
         val file = generateFileName(fileName, cacheDir)
@@ -38,7 +36,7 @@ object FileUtil {
         return file
     }
 
-    fun saveFileFromUri(context: Context, uri: Uri): Uri? {
+    private fun saveFileFromUri(context: Context, uri: Uri): Uri? {
         return try {
             val path = saveFile(context,uri)?.absolutePath ?: return null
             val file = File(path)
@@ -75,7 +73,7 @@ object FileUtil {
         }
     }
 
-    private fun getDocumentCacheDir(@NonNull context: Context): File {
+    private fun getDocumentCacheDir(context: Context): File {
         val dir = File(context.cacheDir, DOCUMENTS_DIR)
         if (!dir.exists()) {
             dir.mkdirs()
@@ -84,7 +82,7 @@ object FileUtil {
     }
 
     private fun getFileName(
-        @NonNull context: Context?,
+        context: Context?,
         uri: Uri
     ): String? {
         val mimeType = context!!.contentResolver.getType(uri)
@@ -120,9 +118,8 @@ object FileUtil {
         return absolutePath ?: uri.toString()
     }
 
-    @Nullable
-    fun generateFileName(
-        @Nullable mName: String?,
+    private fun generateFileName(
+        mName: String?,
         directory: File
     ): File? {
         var name = mName ?: return null
@@ -225,7 +222,7 @@ object FileUtil {
         }
     }
 
-    fun isVideo(context: Context, uri: Uri): Boolean {
+    private fun isVideo(context: Context, uri: Uri): Boolean {
         val mimeType = getMimeType(uri, context)
         return mimeType?.contains(MIME_VIDEO) == true
     }

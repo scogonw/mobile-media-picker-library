@@ -20,6 +20,8 @@ import kotlinx.coroutines.sync.withLock
 internal class MediaViewModel(
     private val repo: MediaRepository
 ): ViewModel() {
+    var cropMedia: MediaData? = null
+
     private val _uiState = MutableStateFlow(MediaUiState.EMPTY)
     val uiState: StateFlow<MediaUiState> get() = _uiState
 
@@ -31,7 +33,7 @@ internal class MediaViewModel(
     fun readCapturedMedia() = requestData.readCapturedMedia()
 
     private val _selectedMediaList = MutableStateFlow<List<MediaData>>(emptyList())
-    val selectedMediaList: StateFlow<List<MediaData>> = _selectedMediaList
+    val selectedMediaList: StateFlow<List<MediaData>> get() = _selectedMediaList
 
     private val selectedMediaMutex = Mutex()
     private val selectedMedia: MutableList<MediaData> = mutableListOf()
@@ -64,6 +66,17 @@ internal class MediaViewModel(
         viewModelScope.launch {
             changeSelectedMediaList(
                 list = requestData.readSelectedMedia()
+            )
+        }
+    }
+
+    fun updateMedia(media: MediaData) {
+        val list = (_selectedMediaList.value).toMutableList()
+        val index = list.indexOfFirst { i -> i.id == media.id }
+        list[index] = media
+        viewModelScope.launch {
+            changeSelectedMediaList(
+                list = list
             )
         }
     }
@@ -109,12 +122,12 @@ internal class MediaViewModel(
         }
     }
 
-    suspend fun writeToCapturedMedia(list: List<MediaData>) {
+    suspend fun writeCapturedMedia(list: List<MediaData>) {
         requestData.changeCapturedMedia(list)
     }
 
     suspend fun clearCapturedMedia() {
-        writeToCapturedMedia(emptyList())
+        writeCapturedMedia(emptyList())
     }
 
     suspend fun clearMediaSelection() {
