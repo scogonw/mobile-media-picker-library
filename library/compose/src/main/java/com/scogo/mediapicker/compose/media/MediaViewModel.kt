@@ -72,8 +72,7 @@ internal class MediaViewModel(
 
     fun updateMedia(media: MediaData) {
         val list = (_selectedMediaList.value).toMutableList()
-        val index = list.indexOfFirst { i -> i.id == media.id }
-        list[index] = media
+        list.find { i -> i.id == media.id }?.uri = media.uri
         viewModelScope.launch {
             changeSelectedMediaList(
                 list = list
