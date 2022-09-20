@@ -84,6 +84,13 @@ private fun MediaPreviewView(
         currentMedia.value.caption = captionFieldState.value.text
     }
 
+    LaunchedEffect(mediaViewModel.mediaIndex) {
+        if(mediaViewModel.mediaIndex !in setOf(0,-1)) {
+            pagerState.scrollToPage(mediaViewModel.mediaIndex)
+            mediaViewModel.mediaIndex = 0
+        }
+    }
+
     LaunchedEffect(uiState.value) {
         val msg = uiState.value.message
         if(msg.isNotEmpty()) {

@@ -16,6 +16,7 @@ import com.scogo.mediapicker.compose.media.MediaViewModel
 import com.scogo.mediapicker.compose.media.MediaViewModelFactory
 import com.scogo.mediapicker.core.data.impl.MediaRepositoryImpl
 import com.scogo.mediapicker.core.event.PushEvent
+import com.scogo.mediapicker.utils.Consts.MEDIA_INDEX
 import com.scogo.mediapicker.utils.Consts.WORK_ID
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.coroutines.CoroutineScope
@@ -26,10 +27,15 @@ import org.greenrobot.eventbus.EventBus
 internal class MediaPreviewActivity: ComponentActivity() {
 
     companion object {
-        fun start(from: Activity, workId: String) {
+        fun start(
+            from: Activity,
+            workId: String,
+            index: Int = 0,
+        ) {
             val intent = Intent(from, MediaPreviewActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 putExtra(WORK_ID,workId)
+                putExtra(MEDIA_INDEX,index)
             }
             from.startActivity(intent)
         }
@@ -54,6 +60,9 @@ internal class MediaPreviewActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        val index = intent.extras?.getInt(MEDIA_INDEX) ?: 0
+        mediaViewModel.mediaIndex = index
 
         val workId = intent.extras?.getString(WORK_ID)
         if(!mediaViewModel.initRequestData(workId)) finish()
@@ -95,7 +104,14 @@ internal class MediaPreviewActivity: ComponentActivity() {
                 scope.launch {
                     mediaViewModel.cropMedia?.also { media ->
                         media.uri = newUri
-                        mediaViewModel.updateMedia(media)
+                        val index = mediaViewModel.updateMedia(media)
+                        val workId = mediaViewModel.readRequestData().readId()
+                        finish()
+                        start(
+                            from = this@MediaPreviewActivity,
+                            workId = workId,
+                            index = index
+                        )
                     }
                 }
             }

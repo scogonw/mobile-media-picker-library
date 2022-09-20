@@ -21,6 +21,7 @@ internal class MediaViewModel(
     private val repo: MediaRepository
 ): ViewModel() {
     var cropMedia: MediaData? = null
+    var mediaIndex: Int = 0
 
     private val _uiState = MutableStateFlow(MediaUiState.EMPTY)
     val uiState: StateFlow<MediaUiState> get() = _uiState
@@ -70,13 +71,17 @@ internal class MediaViewModel(
         }
     }
 
-    fun updateMedia(media: MediaData) {
-        val list = (_selectedMediaList.value).toMutableList()
-        list.find { i -> i.id == media.id }?.uri = media.uri
-        viewModelScope.launch {
-            changeSelectedMediaList(
-                list = list
-            )
+    suspend fun updateMedia(media: MediaData) : Int{
+        return try {
+            val list = _selectedMediaList.value.toMutableList()
+            val index = list.indexOfFirst { i -> i.id == media.id }
+            if(index != -1) {
+                list[index] = media
+                changeSelectedMediaList(list)
+            }
+            index
+        }catch (e: Exception) {
+            -1
         }
     }
 
