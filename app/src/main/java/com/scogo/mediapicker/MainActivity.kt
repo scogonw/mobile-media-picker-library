@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ComposeView
 import com.scogo.mediapicker.compose.MediaPicker
 import com.scogo.mediapicker.compose.onMediaPick
@@ -16,7 +14,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
         findViewById<ComposeView>(R.id.composeView).setContent {
-            val state = remember { mutableStateOf("")}
             Button(
                 onClick = {
                     MediaPicker.pick(
@@ -31,7 +28,7 @@ class MainActivity : AppCompatActivity() {
                     )
                 },
                 content = {
-                    Text(text = state.value)
+                    Text(text = "Pick Images/Videos")
                 }
             )
         }

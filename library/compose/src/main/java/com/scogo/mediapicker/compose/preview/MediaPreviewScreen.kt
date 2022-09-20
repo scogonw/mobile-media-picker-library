@@ -151,6 +151,8 @@ private fun MediaPreviewView(
                             AddCaption(
                                 modifier = Modifier
                                     .imePadding()
+                                    .navigationBarsPadding()
+                                    .systemBarsPadding()
                                     .align(Alignment.BottomCenter),
                                 textFieldState = captionFieldState,
                                 onActionClick = {
