@@ -1,49 +1,40 @@
 package com.scogo.mediapicker.common.ui.components.media
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.scogo.mediapicker.common.ui.components.custom.CustomImageView
 import com.scogo.mediapicker.common.ui.components.util.load
 import com.scogo.mediapicker.core.media.MediaData
-import com.scogo.mediapicker.core.media.MimeTypes
+import com.scogo.mediapicker.utils.isVideo
 
 @Composable
 fun MediaPreviewListView(
     modifier: Modifier,
+    viewModifier: Modifier,
     media: MediaData,
 ) {
-    val isVideo = media.mimeType?.contains(MimeTypes.VIDEO.name) ?: false
-
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center,
         content = {
-            if(isVideo) {
+            if(media.mimeType.isVideo()) {
                 VideoView(
-                    modifier = modifier,
+                    modifier = viewModifier,
                     uri = media.uri
                 )
             }else {
                 CustomImageView(
-                    modifier = modifier,
+                    modifier = viewModifier,
                     content = {
-                        it.load(source = media.uri)
+                        it.load(
+                            source = media.uri,
+                            centerCrop = false
+                        )
                     }
                 )
             }
         }
-    )
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    MediaPreviewListView(
-        modifier = Modifier.fillMaxSize(),
-        media = MediaData.EMPTY,
     )
 }

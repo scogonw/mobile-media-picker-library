@@ -3,14 +3,14 @@ package com.scogo.mediapicker.common.ui.components.media
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.ui.PlayerControlView
-import com.scogo.mediapicker.common.ui.components.util.maxSize
+import com.google.android.exoplayer2.ui.StyledPlayerView
 
 @Composable
 fun VideoView(
@@ -25,24 +25,28 @@ fun VideoView(
                 .build()
 
             it.setMediaItem(mediaItem)
-            it.playWhenReady = true
+            it.playWhenReady = false
             it.prepare()
         }
     }
     Box(
         modifier = modifier,
         content = {
-            AndroidView(
+            DisposableEffect(AndroidView(
                 modifier = modifier,
                 factory = {
-                    PlayerControlView(it).also { view ->
+                    StyledPlayerView(it).also { view ->
                         with(view) {
-                            maxSize()
+                            showController()
                             player = exoPlayer
                         }
                     }
                 }
-            )
+            )) {
+                onDispose {
+                    exoPlayer.release()
+                }
+            }
         }
     )
 }

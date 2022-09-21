@@ -55,7 +55,10 @@ fun MediaView(
                         onItemClick(media)
                     },
                 content = {
-                    it.load(source = media.uri)
+                    it.load(
+                        source = media.uri,
+                        centerCrop = true
+                    )
                 }
             )
             if(selected.value) {

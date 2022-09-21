@@ -5,9 +5,17 @@
         <activity
             android:name="com.scogo.mediapicker.compose.home.HomeActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             />
         <activity android:name=".preview.MediaPreviewActivity"
             android:enabled="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"
+            />
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:enabled="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
             />
     </application>
 </manifest>

@@ -22,3 +22,6 @@ fun Activity.getMediaDirectory(
         filesDir
     }
 }
+fun String?.isVideo(): Boolean {
+    return (this ?: "").contains("video")
+}

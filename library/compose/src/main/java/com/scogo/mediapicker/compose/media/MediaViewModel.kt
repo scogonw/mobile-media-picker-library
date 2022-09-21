@@ -10,8 +10,6 @@ import com.scogo.mediapicker.core.data.api.MediaRepository
 import com.scogo.mediapicker.core.media.MediaData
 import com.scogo.mediapicker.core.request.PickerRequestData
 import com.scogo.mediapicker.core.request.PickerRequestWorker
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,14 +20,21 @@ import kotlinx.coroutines.sync.withLock
 internal class MediaViewModel(
     private val repo: MediaRepository
 ): ViewModel() {
-    private val scope = CoroutineScope(Dispatchers.Main)
+    var cropMedia: MediaData? = null
+    var mediaIndex: Int = 0
+
+    private val _uiState = MutableStateFlow(MediaUiState.EMPTY)
+    val uiState: StateFlow<MediaUiState> get() = _uiState
 
     private val worker = PickerRequestWorker.getInstance()
     private lateinit var requestData: PickerRequestData
+
     fun readRequestData() = requestData
+    fun captionMandatory() = readRequestData().readPickerConfig().captionMandatory
+    fun readCapturedMedia() = requestData.readCapturedMedia()
 
     private val _selectedMediaList = MutableStateFlow<List<MediaData>>(emptyList())
-    val selectedMediaList: StateFlow<List<MediaData>> = _selectedMediaList
+    val selectedMediaList: StateFlow<List<MediaData>> get() = _selectedMediaList
 
     private val selectedMediaMutex = Mutex()
     private val selectedMedia: MutableList<MediaData> = mutableListOf()
@@ -41,19 +46,6 @@ internal class MediaViewModel(
             true
         }else {
             false
-        }
-    }
-
-    fun syncSelectedMediaList() {
-        changeSelectedMediaList(requestData.readSelectedMedia())
-    }
-
-    private fun changeSelectedMediaList(list: List<MediaData>){
-        scope.launch {
-            requestData.changeSelectedMedia(list)
-            selectedMediaMutex.withLock {
-                _selectedMediaList.value = list.toMutableList()
-            }
         }
     }
 
@@ -71,7 +63,42 @@ internal class MediaViewModel(
         ).flow.cachedIn(viewModelScope)
     }
 
-    fun selectMedia(mediaData: MediaData) {
+    fun syncSelectedMediaList() {
+        viewModelScope.launch {
+            changeSelectedMediaList(
+                list = requestData.readSelectedMedia()
+            )
+        }
+    }
+
+    suspend fun updateMedia(media: MediaData) : Int{
+        return try {
+            val list = _selectedMediaList.value.toMutableList()
+            val index = list.indexOfFirst { i -> i.id == media.id }
+            if(index != -1) {
+                list[index] = media
+                changeSelectedMediaList(list)
+            }
+            index
+        }catch (e: Exception) {
+            -1
+        }
+    }
+
+    fun isCaptionsEmpty(list: List<MediaData>): Int {
+        var index = -1
+        run breaker@ {
+            list.forEachIndexed { i, it ->
+                if(it.caption?.trim().isNullOrEmpty()) {
+                    index = i
+                    return@breaker
+                }
+            }
+        }
+        return index
+    }
+
+    suspend fun selectMedia(mediaData: MediaData) {
         if (isMediaSelectionEnable(mediaData.id)) {
             var selected = mediaData.selected.value
             selected = !selected
@@ -92,12 +119,38 @@ internal class MediaViewModel(
         else selectedMedia.size == 1 && selectedMedia[0].id == id
     }
 
-    fun clearMediaSelection() {
-        viewModelScope.launch(Dispatchers.IO) {
-            selectedMedia.clear()
-            changeSelectedMediaList(emptyList())
+    private suspend fun changeSelectedMediaList(list: List<MediaData>){
+        requestData.changeSelectedMedia(list)
+        selectedMediaMutex.withLock {
+            _selectedMediaList.value = list.toMutableList()
         }
     }
 
+    suspend fun writeCapturedMedia(list: List<MediaData>) {
+        requestData.changeCapturedMedia(list)
+    }
 
+    suspend fun clearCapturedMedia() {
+        writeCapturedMedia(emptyList())
+    }
+
+    suspend fun clearMediaSelection() {
+        selectedMedia.forEach {
+            it.selected.value = false
+        }
+        selectedMedia.clear()
+        changeSelectedMediaList(selectedMedia)
+    }
+
+    fun showMessage(msg: String) {
+        _uiState.value = _uiState.value.copy(
+            message = msg
+        )
+    }
+
+    fun clearMessage() {
+        _uiState.value = _uiState.value.copy(
+            message = ""
+        )
+    }
 }

@@ -28,6 +28,8 @@ apache_commons = "2.4"
 android_glide = "4.13.2"
 android_exo_player = "2.18.1"
 guava = "29.0-android"
+android_eventbus = "3.3.1"
+android_image_cropper = "2.8.0"
 
 [libraries]
 gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
@@ -51,6 +53,8 @@ android_compose_test_manifest = { module = "androidx.compose.ui:ui-test-manifest
 android_camerax = { module = "androidx.camera:camera-camera2", version.ref = "android_camerax" }
 android_camerax_lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "android_camerax" }
 android_camerax_view = { module = "androidx.camera:camera-view", version.ref = "android_camerax" }
+android_camerax_video = { module = "androidx.camera:camera-video", version.ref = "android_camerax" }
+android_camerax_exts = { module = "androidx.camera:camera-extensions", version.ref = "android_camerax" }
 android_accompanist_permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "android_accompanist" }
 android_accompanist_system_ui = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "android_accompanist" }
 android_accompanist_pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "android_accompanist" }
@@ -65,11 +69,13 @@ android_glide = { module = "com.github.bumptech.glide:glide", version.ref = "and
 android_glide_compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "android_glide" }
 android_exo_player = { module = "com.google.android.exoplayer:exoplayer", version.ref = "android_exo_player" }
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
+android_eventbus = { module = "org.greenrobot:eventbus", version.ref = "android_eventbus" }
+android_image_cropper = { module = "com.theartofdev.edmodo:android-image-cropper", version.ref = "android_image_cropper" }
 
 [bundles]
 android_compose = ["android_compose_ui","android_compose_material", "android_compose_preview", "android_compose_activity", "android_compose_animation_graphics", "android_compose_navigation"]
 android_compose_debug = ["android_compose_tooling","android_compose_test_manifest","android_custom_view","android_custom_view_container"]
-android_camerax = ["android_camerax","android_camerax_lifecycle","android_camerax_view","guava"]
+android_camerax = ["android_camerax","android_camerax_lifecycle","android_camerax_video","android_camerax_view","android_camerax_exts","guava"]
 android_accompanist = ["android_accompanist_permissions","android_accompanist_system_ui"]
 android_ktx = ["android_activity_ktx"]
 
