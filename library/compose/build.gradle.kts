@@ -35,7 +35,7 @@ project(":library:compose") {
                 create<MavenPublication>("maven") {
                     groupId = "com.gitlab.scogo"
                     artifactId = "scogo_media_picker_library"
-                    version = "1.0.0"
+                    version = "1.0.2"
                     from(components["release"])
                 }
             }
