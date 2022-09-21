@@ -11,11 +11,11 @@ android {
     }
 }
 dependencies {
-    implementation(project(":library:common:ui-res"))
-    implementation(project(":library:common:ui-theme"))
-    implementation(project(":library:common:ui-components"))
-    implementation(project(":library:core"))
-    implementation(project(":library:utils"))
+    api(project(":library:common:ui-res"))
+    api(project(":library:common:ui-theme"))
+    api(project(":library:common:ui-components"))
+    api(project(":library:core"))
+    api(project(":library:utils"))
     implementation(libs.bundles.android.ktx)
     implementation(libs.bundles.android.compose)
     implementation(libs.bundles.android.camerax)
