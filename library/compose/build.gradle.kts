@@ -1,5 +1,14 @@
 plugins {
     id("scogo_android_compose_lib")
+    id("maven-publish")
+}
+android {
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 dependencies {
     implementation(project(":library:common:ui-res"))
@@ -18,4 +27,16 @@ dependencies {
     implementation(libs.android.accompanist.pager)
     implementation(libs.android.eventbus)
     api(libs.android.image.cropper)
+}
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                groupId = "com.gitlab.scogo"
+                artifactId = "scogo_media_picker_library"
+                version = "1.0.0"
+                from(components["release"])
+            }
+         }
+    }
 }
