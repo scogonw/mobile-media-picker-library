@@ -28,15 +28,17 @@ dependencies {
     implementation(libs.android.eventbus)
     api(libs.android.image.cropper)
 }
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("maven") {
-                groupId = "com.gitlab.scogo"
-                artifactId = "scogo_media_picker_library"
-                version = "1.0.0"
-                from(components["release"])
+project(":library:compose") {
+    afterEvaluate {
+        publishing {
+            publications {
+                create<MavenPublication>("maven") {
+                    groupId = "com.gitlab.scogo"
+                    artifactId = "scogo_media_picker_library"
+                    version = "1.0.0"
+                    from(components["release"])
+                }
             }
-         }
+        }
     }
 }
