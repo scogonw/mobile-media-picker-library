@@ -1,5 +1,6 @@
 package com.scogo.mediapicker.compose.presentation.preview
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,13 +18,13 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import com.scogo.mediapicker.compose.R
 import com.scogo.mediapicker.compose.common.custom.AddCaption
 import com.scogo.mediapicker.compose.common.media.MediaPreviewListView
-import com.scogo.mediapicker.compose.R
-import com.scogo.mediapicker.compose.presentation.theme.Dimens
-import com.scogo.mediapicker.compose.presentation.media.MediaViewModel
-import com.scogo.mediapicker.compose.presentation.activityMediaViewModel
 import com.scogo.mediapicker.compose.core.media.MediaData
+import com.scogo.mediapicker.compose.presentation.activityMediaViewModel
+import com.scogo.mediapicker.compose.presentation.media.MediaViewModel
+import com.scogo.mediapicker.compose.presentation.theme.Dimens
 import com.scogo.mediapicker.compose.util.isVideo
 import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -94,10 +95,7 @@ private fun MediaPreviewView(
     LaunchedEffect(uiState.value) {
         val msg = uiState.value.message
         if(msg.isNotEmpty()) {
-            scaffoldState.snackbarHostState.showSnackbar(
-                message = msg,
-                duration = SnackbarDuration.Short
-            )
+            Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
             with(mediaViewModel) {
                 clearMessage()
             }

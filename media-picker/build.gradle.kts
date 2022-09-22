@@ -33,7 +33,7 @@ afterEvaluate {
             create<MavenPublication>("maven") {
                 groupId = "com.gitlab.scogo"
                 artifactId = "scogo_media_picker_library"
-                version = "1.0.3"
+                version = libs.versions.scogo.media.picker.get()
                 from(components["release"])
             }
         }
