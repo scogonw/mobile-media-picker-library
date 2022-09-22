@@ -27,12 +27,21 @@ private val projections by lazy {
 internal fun Context.createMediaCursor(
     limit: Int,
     offset: Int,
+    mime: MimeTypes
 ): Cursor? {
     val whereCondition = "${MediaStore.Files.FileColumns.MEDIA_TYPE} = ? OR ${MediaStore.Files.FileColumns.MEDIA_TYPE} = ?"
-    val selectionArgs = arrayOf(
-        "${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}",
-        "${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}"
-    )
+    val imageColumn = "${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}"
+    val videoColumn = "${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}"
+    val selectionArgs = mutableListOf<String>().also {
+        when (mime) {
+            MimeTypes.IMAGE -> it.add(imageColumn)
+            MimeTypes.VIDEO -> it.add(videoColumn)
+            else -> {
+                it.add(imageColumn)
+                it.add(videoColumn)
+            }
+        }
+    }.toTypedArray()
 
     return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         val bundle = bundleOf(
@@ -64,9 +73,14 @@ internal fun Context.createMediaCursor(
 internal fun Context.fetchMedia(
     limit: Int,
     offset: Int,
+    mime : MimeTypes,
 ): List<MediaData> {
     val mediaList = arrayListOf<MediaData>()
-    val cursor = createMediaCursor(limit, offset)
+    val cursor = createMediaCursor(
+        limit = limit,
+        offset = offset,
+        mime = mime
+    )
     cursor?.let {
         val idColumn = it.getColumnIndexOrThrow(projections[0])
         val displayNameColumn = it.getColumnIndexOrThrow(projections[1])

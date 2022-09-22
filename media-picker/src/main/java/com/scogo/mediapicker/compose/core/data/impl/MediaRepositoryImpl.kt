@@ -5,6 +5,7 @@ import androidx.paging.PagingSource
 import com.scogo.mediapicker.compose.core.data.api.MediaDataSource
 import com.scogo.mediapicker.compose.core.data.api.MediaRepository
 import com.scogo.mediapicker.compose.core.media.MediaData
+import com.scogo.mediapicker.compose.core.media.MimeTypes
 import com.scogo.mediapicker.compose.core.media.createMediaCursor
 import com.scogo.mediapicker.compose.core.media.fetchMedia
 import kotlinx.coroutines.Dispatchers
@@ -15,20 +16,24 @@ internal class MediaRepositoryImpl(
 ): MediaRepository {
 
     override suspend fun getCount(): Int {
-        val cursor = context.createMediaCursor(Int.MAX_VALUE,0) ?: return 0
+        val cursor = context.createMediaCursor(Int.MAX_VALUE,0, MimeTypes.NONE) ?: return 0
         val count = cursor.count
         cursor.close()
         return count
     }
 
     override suspend fun getByOffset(offset: Int): MediaData? {
-        return context.fetchMedia(1,offset).firstOrNull()
+        return context.fetchMedia(1,offset, MimeTypes.NONE).firstOrNull()
     }
 
-    override fun getMediaPagingSource(): PagingSource<Int, MediaData> {
+    override fun getMediaPagingSource(mimeType: MimeTypes): PagingSource<Int, MediaData> {
         return MediaDataSource { limit, offset ->
             withContext(Dispatchers.IO) {
-                context.fetchMedia(limit, offset)
+                context.fetchMedia(
+                    limit = limit,
+                    offset = offset,
+                    mime = mimeType
+                )
             }
         }
     }

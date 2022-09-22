@@ -58,7 +58,9 @@ internal class MediaViewModel(
                 enablePlaceholders = true
             ),
             pagingSourceFactory = {
-                repo.getMediaPagingSource()
+                repo.getMediaPagingSource(
+                    mimeType = readRequestData().readPickerConfig().mimeType
+                )
             }
         ).flow.cachedIn(viewModelScope)
     }
