@@ -76,8 +76,8 @@ android_image_cropper = { module = "com.theartofdev.edmodo:android-image-cropper
 android_compose = ["android_compose_ui","android_compose_material", "android_compose_preview", "android_compose_activity", "android_compose_animation_graphics", "android_compose_navigation"]
 android_compose_debug = ["android_compose_tooling","android_compose_test_manifest","android_custom_view","android_custom_view_container"]
 android_camerax = ["android_camerax","android_camerax_lifecycle","android_camerax_video","android_camerax_view","android_camerax_exts","guava"]
-android_accompanist = ["android_accompanist_permissions","android_accompanist_system_ui"]
-android_ktx = ["android_activity_ktx"]
+android_accompanist = ["android_accompanist_permissions","android_accompanist_system_ui","android_accompanist_pager"]
+android_ktx = ["android_activity_ktx","androidx_core_ktx"]
 
 [plugins]
 android_application = { id = "com.android.application", version.ref = "gradle" }
