@@ -32,12 +32,12 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.util.Consumer
+import com.scogo.mediapicker.compose.R
 import com.scogo.mediapicker.compose.common.camera.CameraActionIcon
 import com.scogo.mediapicker.compose.common.custom.Chip
-import com.scogo.mediapicker.compose.R
+import com.scogo.mediapicker.compose.core.media.MimeTypes
 import com.scogo.mediapicker.compose.presentation.theme.ButtonDimes
 import com.scogo.mediapicker.compose.presentation.theme.Dimens
-import com.scogo.mediapicker.compose.core.media.MimeTypes
 import java.io.File
 import java.util.*
 import java.util.concurrent.Executor
@@ -49,6 +49,7 @@ internal fun CameraView(
     outputDirectory: File,
     executor: Executor,
     mediaActionSound: MediaActionSound,
+    videoRecordingEnable: Boolean,
     footerContent: @Composable () -> Unit,
     bottomContent: @Composable () -> Unit = {},
     onMediaCaptured: (Uri) -> Unit,
@@ -233,7 +234,7 @@ internal fun CameraView(
                         )
                     },
                     onHold = { released ->
-                        holder.recordingSession = if (!released && holder.recordingSession == null) {
+                        holder.recordingSession = if (videoRecordingEnable && !released && holder.recordingSession == null) {
                                 recording.start(executor, videoRecordingListener)
                             } else {
                                 isRecording.value = false

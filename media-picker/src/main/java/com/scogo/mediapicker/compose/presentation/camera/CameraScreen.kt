@@ -30,17 +30,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.scogo.mediapicker.compose.R
 import com.scogo.mediapicker.compose.common.custom.BottomActionBar
 import com.scogo.mediapicker.compose.common.media.MediaView
-import com.scogo.mediapicker.compose.R
-import com.scogo.mediapicker.compose.presentation.theme.Dimens
-import com.scogo.mediapicker.compose.presentation.media.MediaScreen
-import com.scogo.mediapicker.compose.presentation.media.MediaViewModel
-import com.scogo.mediapicker.compose.util.*
 import com.scogo.mediapicker.compose.core.di.AppServiceLocator
 import com.scogo.mediapicker.compose.core.media.MediaData
 import com.scogo.mediapicker.compose.presentation.activityMediaViewModel
 import com.scogo.mediapicker.compose.presentation.composeActivity
+import com.scogo.mediapicker.compose.presentation.media.MediaScreen
+import com.scogo.mediapicker.compose.presentation.media.MediaViewModel
+import com.scogo.mediapicker.compose.presentation.theme.Dimens
+import com.scogo.mediapicker.compose.util.FileUtil
+import com.scogo.mediapicker.compose.util.animatedHide
+import com.scogo.mediapicker.compose.util.animatedShow
+import com.scogo.mediapicker.compose.util.onSwipe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -143,6 +146,7 @@ private fun CameraScreen(
                 outputDirectory = outputDir,
                 executor = executor,
                 mediaActionSound = sound,
+                videoRecordingEnable = mediaViewModel.videoRecordingEnable(),
                 footerContent = {
                     CameraFooter(
                         lazyMediaList = mediaList,

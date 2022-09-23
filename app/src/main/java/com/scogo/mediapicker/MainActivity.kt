@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.ui.platform.ComposeView
+import com.scogo.mediapicker.compose.core.media.MimeTypes
 import com.scogo.mediapicker.compose.scogoMediaPick
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
                 onClick = {
                     scogoMediaPick(
                         multiple = true,
+                        mimeType = MimeTypes.IMAGE,
                         captionMandatory = true
                     ) {
 

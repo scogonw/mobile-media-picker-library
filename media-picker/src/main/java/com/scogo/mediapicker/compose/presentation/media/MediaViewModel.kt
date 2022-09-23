@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.scogo.mediapicker.compose.core.data.api.MediaRepository
 import com.scogo.mediapicker.compose.core.media.MediaData
+import com.scogo.mediapicker.compose.core.media.MimeTypes
 import com.scogo.mediapicker.compose.core.request.PickerRequestData
 import com.scogo.mediapicker.compose.core.request.PickerRequestWorker
 import kotlinx.coroutines.flow.Flow
@@ -31,7 +32,11 @@ internal class MediaViewModel(
 
     fun readRequestData() = requestData
     fun captionMandatory() = readRequestData().readPickerConfig().captionMandatory
-    fun readCapturedMedia() = requestData.readCapturedMedia()
+    fun readCapturedMedia() = readRequestData().readCapturedMedia()
+
+    fun videoRecordingEnable(): Boolean {
+        return readRequestData().readPickerConfig().mimeType != MimeTypes.IMAGE
+    }
 
     private val _selectedMediaList = MutableStateFlow<List<MediaData>>(emptyList())
     val selectedMediaList: StateFlow<List<MediaData>> get() = _selectedMediaList
