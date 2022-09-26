@@ -11,7 +11,6 @@ android {
     }
 }
 dependencies {
-    implementation(libs.apache.commons)
     implementation(libs.bundles.android.ktx)
     implementation(libs.bundles.android.compose)
     implementation(libs.bundles.android.camerax)
