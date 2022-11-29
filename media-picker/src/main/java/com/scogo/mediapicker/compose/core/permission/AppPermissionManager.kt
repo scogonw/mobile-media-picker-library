@@ -1,4 +1,4 @@
-package com.scogo.mediapicker.core.permission
+package com.scogo.mediapicker.compose.core.permission
 
 import android.Manifest
 import android.app.Activity
