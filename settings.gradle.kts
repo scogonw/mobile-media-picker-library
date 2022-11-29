@@ -29,11 +29,4 @@ includeBuild("build-logic") {
     }
 }
 include(":app")
-include(":library")
-include(":library:core")
-include(":library:utils")
-include(":library:compose")
-include(":library:common")
-include(":library:common:ui-res")
-include(":library:common:ui-theme")
-include(":library:common:ui-components")
+include(":media-picker")
