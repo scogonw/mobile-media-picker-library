@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.media.MediaActionSound
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
@@ -38,6 +39,10 @@ import com.scogo.mediapicker.compose.common.custom.Chip
 import com.scogo.mediapicker.compose.core.media.MimeTypes
 import com.scogo.mediapicker.compose.presentation.theme.ButtonDimes
 import com.scogo.mediapicker.compose.presentation.theme.Dimens
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.*
 import java.util.concurrent.Executor
@@ -55,6 +60,7 @@ internal fun CameraView(
     onMediaCaptured: (Uri) -> Unit,
     onError: (Exception) -> Unit
 ) {
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -62,6 +68,8 @@ internal fun CameraView(
     val timerState = holder.timer.readTime().collectAsState()
     val isRecording = rememberSaveable { mutableStateOf(false) }
     val refreshPreview = remember { mutableStateOf(false) }
+    val cameraCaptureType = remember { mutableStateOf<CameraCaptureType>(CameraCaptureType.Image) }
+    val readyToCapture = remember { mutableStateOf(true) }
 
     LaunchedEffect(isRecording.value) {
         if (isRecording.value) {
@@ -91,6 +99,11 @@ internal fun CameraView(
         .requireLensFacing(lensFacing.value)
         .build()
 
+    /**
+     * Sometimes while setting qualitySelector throw error on mi devices.
+     * videoRecorder.setQualitySelector(qualitySelector)
+     */
+
     val qualitySelector = QualitySelector.from(
         Quality.UHD,
         FallbackStrategy.higherQualityOrLowerThan(Quality.SD)
@@ -98,7 +111,6 @@ internal fun CameraView(
 
     val videoRecorder = Recorder.Builder()
         .setExecutor(executor)
-        .setQualitySelector(qualitySelector)
         .build()
 
     val videoCapture = VideoCapture.withOutput(videoRecorder)
@@ -138,21 +150,34 @@ internal fun CameraView(
         }
     }
 
-    LaunchedEffect(lensFacing.value, flashModeAuto.value, refreshPreview.value) {
-        val cameraProvider = context.getCameraProvider()
-        cameraProvider.unbindAll()
-        cameraProvider.bindToLifecycle(
-            lifecycleOwner,
-            cameraSelector,
-            preview,
-            imageCapture,
-            videoCapture
+    LaunchedEffect(
+        lensFacing.value,
+        flashModeAuto.value,
+        refreshPreview.value,
+        cameraCaptureType.value
+    ) {
+        context.bindCameraWithUsecase(
+            cameraCaptureType = cameraCaptureType.value,
+            lifecycleOwner = lifecycleOwner,
+            cameraSelector = cameraSelector,
+            imageCapture = imageCapture,
+            videoCapture = videoCapture,
+            preview = preview,
+            previewView = previewView,
+            onStart = {
+                readyToCapture.value = false
+            },
+            onFinish = {
+                scope.launch {
+                    delay(500)
+                    readyToCapture.value = true
+                }
+            }
         )
-        preview.setSurfaceProvider(previewView.surfaceProvider)
     }
 
     LaunchedEffect(refreshPreview.value) {
-        if(!refreshPreview.value) {
+        if (!refreshPreview.value) {
             refreshPreview.value = true
         }
     }
@@ -200,7 +225,8 @@ internal fun CameraView(
                         shape = CircleShape
                     ),
                     onClick = {
-                        flashModeAuto.value = if (flashModeAuto.value == ImageCapture.FLASH_MODE_AUTO) {
+                        flashModeAuto.value =
+                            if (flashModeAuto.value == ImageCapture.FLASH_MODE_AUTO) {
                                 ImageCapture.FLASH_MODE_ON
                             } else {
                                 ImageCapture.FLASH_MODE_AUTO
@@ -223,24 +249,42 @@ internal fun CameraView(
                 )
                 CameraActionIcon(
                     onClick = {
-                        imageCapture.takePhoto(
-                            outputDirectory = outputDirectory,
-                            executor = executor,
-                            onImageSaved = {
-                                mediaActionSound.play(MediaActionSound.SHUTTER_CLICK)
-                                onMediaCaptured(it)
-                            },
-                            onError = onError,
-                        )
+                        scope.launch {
+                            safeTakePhoto(
+                                cameraCaptureType = cameraCaptureType.value,
+                                changeCameraCaptureType = {
+                                    cameraCaptureType.value = it
+                                },
+                                imageCapture = imageCapture,
+                                outputDirectory = outputDirectory,
+                                executor = executor,
+                                onError = onError,
+                                mediaActionSound = mediaActionSound,
+                                onMediaCaptured = onMediaCaptured,
+                            )
+                        }
                     },
                     onHold = { released ->
-                        holder.recordingSession = if (videoRecordingEnable && !released && holder.recordingSession == null) {
-                                recording.start(executor, videoRecordingListener)
-                            } else {
-                                isRecording.value = false
-                                holder.recordingSession?.stop()
-                                null
-                            }
+                        scope.launch {
+                            safeTakeVideo(
+                                cameraCaptureType = cameraCaptureType.value,
+                                changeCameraCaptureType = {
+                                    cameraCaptureType.value = it
+                                },
+                                videoRecordingEnable = videoRecordingEnable,
+                                isReleased = released,
+                                oldRecordingSession = holder.recordingSession,
+                                recording = recording,
+                                executor = executor,
+                                listener = videoRecordingListener,
+                                onRecordingSession = {
+                                    holder.recordingSession = it
+                                },
+                                onRecording = {
+                                    isRecording.value = it
+                                }
+                            )
+                        }
                     },
                     content = {
                         Icon(
@@ -250,7 +294,13 @@ internal fun CameraView(
                                 .size(Dimens.Nine)
                                 .padding(Dimens.HalfQuarter)
                                 .border(Dimens.Quarter, Color.White, CircleShape),
-                            tint = if (isRecording.value) Color.Red else Color.White
+                            tint = if (isRecording.value) {
+                                Color.Red
+                            } else if (readyToCapture.value) {
+                                Color.Green
+                            } else {
+                                Color.White
+                            }
                         )
                     },
                 )
@@ -260,7 +310,8 @@ internal fun CameraView(
                         shape = CircleShape
                     ),
                     onClick = {
-                        lensFacing.value = if (lensFacing.value == CameraSelector.LENS_FACING_BACK) {
+                        lensFacing.value =
+                            if (lensFacing.value == CameraSelector.LENS_FACING_BACK) {
                                 CameraSelector.LENS_FACING_FRONT
                             } else {
                                 CameraSelector.LENS_FACING_BACK

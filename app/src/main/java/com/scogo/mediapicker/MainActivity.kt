@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
                 onClick = {
                     scogoMediaPick(
                         multiple = true,
-                        mimeType = MimeTypes.IMAGE,
                         captionMandatory = true
                     ) {
 

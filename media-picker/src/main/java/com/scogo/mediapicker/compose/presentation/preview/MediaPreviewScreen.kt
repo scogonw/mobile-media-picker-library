@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -21,8 +22,11 @@ import com.google.accompanist.pager.rememberPagerState
 import com.scogo.mediapicker.compose.R
 import com.scogo.mediapicker.compose.common.custom.AddCaption
 import com.scogo.mediapicker.compose.common.media.MediaPreviewListView
+import com.scogo.mediapicker.compose.core.data.api.MediaRepository
+import com.scogo.mediapicker.compose.core.data.impl.MediaRepositoryImpl
 import com.scogo.mediapicker.compose.core.media.MediaData
 import com.scogo.mediapicker.compose.presentation.activityMediaViewModel
+import com.scogo.mediapicker.compose.presentation.media.MediaScreen
 import com.scogo.mediapicker.compose.presentation.media.MediaViewModel
 import com.scogo.mediapicker.compose.presentation.theme.Dimens
 import com.scogo.mediapicker.compose.util.isVideo
@@ -180,6 +184,7 @@ private fun MediaPreviewView(
                                     .navigationBarsPadding()
                                     .systemBarsPadding()
                                     .align(Alignment.BottomCenter),
+                                hasInput = mediaViewModel.captionMandatory(),
                                 textFieldState = captionFieldState,
                                 onActionClick = {
                                     if (mediaViewModel.captionMandatory()) {

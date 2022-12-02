@@ -1,9 +1,6 @@
 package com.scogo.mediapicker.compose.common.custom
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -25,6 +22,7 @@ import com.scogo.mediapicker.compose.presentation.theme.LightBlue
 @Composable
 internal fun AddCaption(
     modifier: Modifier,
+    hasInput: Boolean,
     textFieldState: MutableState<TextFieldValue>,
     onActionClick: () -> Unit
 ) {
@@ -32,30 +30,34 @@ internal fun AddCaption(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = Dimens.One, vertical = Dimens.Two),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = Dimens.One, vertical = Dimens.Two)
+        ,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End
     ) {
-        OutlinedTextField(
-            modifier = Modifier
-                .height(ButtonDimes.Six)
-                .weight(1f)
-                .padding(Dimens.Zero),
-            value = text,
-            onValueChange = {
-                text = it
-            },
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.enter_your_caption),
-                    style = MaterialTheme.typography.subtitle2,
-                )
-            },
-            shape = RoundedCornerShape(Dimens.Four),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = Color.White,
-                focusedBorderColor = LightBlue
-            ),
-        )
+        if(hasInput) {
+            OutlinedTextField(
+                modifier = Modifier
+                    .height(ButtonDimes.Six)
+                    .weight(1f)
+                    .padding(Dimens.Zero),
+                value = text,
+                onValueChange = {
+                    text = it
+                },
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.enter_your_caption),
+                        style = MaterialTheme.typography.subtitle2,
+                    )
+                },
+                shape = RoundedCornerShape(Dimens.Four),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    backgroundColor = Color.White,
+                    focusedBorderColor = LightBlue
+                ),
+            )
+        }
         IconRoundedButton(
             modifier = Modifier
                 .height(Dimens.Six)
