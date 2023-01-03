@@ -25,7 +25,13 @@ internal class PickerRequestData private constructor(
         }
     }
 
-    fun mediaPicked() = callback.onPick(selectedMediaList)
+    fun mediaPicked() {
+        if(capturedMedia.isNotEmpty()) {
+            callback.onPick(capturedMedia)
+        } else {
+            callback.onPick(selectedMediaList)
+        }
+    }
 
     private val selectedMediaLock = Mutex()
     private var selectedMediaList = listOf<MediaData>()

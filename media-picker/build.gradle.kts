@@ -1,6 +1,6 @@
 plugins {
     id("scogo_android_compose_lib")
-    id("maven-publish")
+    `maven-publish`
 }
 android {
     publishing {

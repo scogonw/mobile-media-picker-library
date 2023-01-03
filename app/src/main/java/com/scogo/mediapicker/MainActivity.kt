@@ -1,6 +1,7 @@
 package com.scogo.mediapicker
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
                         multiple = true,
                         captionMandatory = true
                     ) {
-
+                        Log.e("MainActivity","picked media ${it.size}")
                     }
                 },
                 content = {
