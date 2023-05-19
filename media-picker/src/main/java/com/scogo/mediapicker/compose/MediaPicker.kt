@@ -19,6 +19,7 @@ class MediaPicker private constructor() {
             multiple: Boolean = false,
             mimeType: MimeTypes = MimeTypes.NONE,
             captionMandatory: Boolean = false,
+            captionEnabled: Boolean = false,
             callback: MediaPickerCallback,
         ) {
             val worker = PickerRequestWorker.getInstance()
@@ -26,7 +27,8 @@ class MediaPicker private constructor() {
                 config = MediaPickerConfiguration(
                     multipleAllowed = multiple,
                     mimeType = mimeType,
-                    captionMandatory = captionMandatory
+                    captionMandatory = captionMandatory,
+                    captionEnabled = captionEnabled
                 ),
                 callback = callback
             )
@@ -42,6 +44,7 @@ fun Activity.scogoMediaPick(
     multiple: Boolean = false,
     mimeType: MimeTypes = MimeTypes.NONE,
     captionMandatory: Boolean = false,
+    captionEnabled: Boolean = false,
     onPick: (List<MediaData>) -> Unit
 ){
     MediaPicker.pick(
@@ -49,6 +52,7 @@ fun Activity.scogoMediaPick(
         multiple = multiple,
         mimeType = mimeType,
         captionMandatory = captionMandatory,
+        captionEnabled = captionEnabled,
         callback = object : MediaPickerCallback {
             override fun onPick(list: List<MediaData>) {
                 onPick.invoke(list)
@@ -61,12 +65,14 @@ fun Fragment.scogoMediaPick(
     multiple: Boolean = false,
     mimeType: MimeTypes = MimeTypes.NONE,
     captionMandatory: Boolean = false,
+    captionEnabled: Boolean = false,
     onPick: (List<MediaData>) -> Unit
 ){
     requireActivity().scogoMediaPick(
         multiple = multiple,
         mimeType = mimeType,
         captionMandatory = captionMandatory,
+        captionEnabled = captionEnabled,
         onPick = onPick
     )
 }

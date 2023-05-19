@@ -32,6 +32,7 @@ internal class MediaViewModel(
 
     fun readRequestData() = requestData
     fun captionMandatory() = readRequestData().readPickerConfig().captionMandatory
+    fun captionEnabled() = readRequestData().readPickerConfig().captionEnabled
     fun readCapturedMedia() = readRequestData().readCapturedMedia()
 
     fun videoRecordingEnable(): Boolean {

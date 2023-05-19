@@ -20,7 +20,8 @@ class MainActivity : AppCompatActivity() {
                 onClick = {
                     scogoMediaPick(
                         multiple = true,
-                        captionMandatory = true
+                        captionMandatory = false,
+                        captionEnabled = false,
                     ) {
                         Log.e("MainActivity","picked media ${it.size}")
                     }

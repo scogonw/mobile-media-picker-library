@@ -184,18 +184,16 @@ private fun MediaPreviewView(
                                     .navigationBarsPadding()
                                     .systemBarsPadding()
                                     .align(Alignment.BottomCenter),
-                                hasInput = mediaViewModel.captionMandatory(),
+                                hasInput = mediaViewModel.captionEnabled(),
                                 textFieldState = captionFieldState,
                                 onActionClick = {
-                                    if (mediaViewModel.captionMandatory()) {
+                                    if (mediaViewModel.captionMandatory() && mediaViewModel.captionEnabled()) {
                                         val index = mediaViewModel.isCaptionsEmpty(currentMediaList)
                                         if(index == -1) {
                                             onMediaPicked()
                                         }else {
                                             scope.launch {
-                                                mediaViewModel.showMessage(
-                                                    msg = context.getString(R.string.please_add_caption)
-                                                )
+                                                mediaViewModel.showMessage(msg = context.getString(R.string.please_add_caption))
                                                 pagerState.animateScrollToPage(index)
                                             }
                                         }
