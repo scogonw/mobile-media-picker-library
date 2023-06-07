@@ -21,11 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.LazyPagingItems
+import com.scogo.mediapicker.compose.R
 import com.scogo.mediapicker.compose.common.custom.BottomActionBar
 import com.scogo.mediapicker.compose.common.media.MediaView
-import com.scogo.mediapicker.compose.R
-import com.scogo.mediapicker.compose.presentation.theme.Dimens
 import com.scogo.mediapicker.compose.core.media.MediaData
+import com.scogo.mediapicker.compose.presentation.theme.Dimens
 import kotlinx.coroutines.launch
 
 @Composable
@@ -149,7 +149,12 @@ internal fun MediaVerticalGridList(
                     }
                 }
             }
-            lazyMediaList[snapshotItems.size - 1]
+
+            try {
+                lazyMediaList[snapshotItems.size - 1]
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }
